@@ -1,0 +1,3192 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="artifact-type" content="narrative">
+<meta name="design-style" content="canopy">
+<title>The Little Transportation Adventure — Buku Cerita Interaktif Bahasa Inggris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+
+  /* 1. Canopy base + Storybook Watercolor Palette */
+  --background: #faf5ea;
+  --surface-container-low: #f2ead9;
+  --surface-container: #e8dcc5;
+  --surface-container-high: #ddd0b6;
+  --surface-paper-white: #fdfaf2;
+
+  /* Ink */
+  --on-surface: #27312a;
+  --on-surface-variant: #49544b;
+
+  /* Lines */
+  --outline: #7a7467;
+  --outline-variant: #cfc3ab;
+
+  /* Storybook Accents: Forest Green, Warm Red, Mustard Yellow, Sky Blue */
+  --primary: #2f6845;
+  --on-primary: #ffffff;
+  --primary-container: #d8efe0;
+  --on-primary-container: #1b482c;
+
+  --secondary: #586159;
+  --tertiary: #9e6215;
+  --tertiary-container: #f5dfb0;
+  --on-tertiary-container: #5c3706;
+
+  --story-red: #b83c2e;
+  --on-story-red: #ffffff;
+  --story-red-soft: #f7dad4;
+  --on-story-red-soft: #6e1f16;
+
+  --story-mustard: #d19422;
+  --story-mustard-deep: #7a4f06;
+  --story-mustard-soft: #faecc8;
+
+  --story-sky: #3b7899;
+  --on-story-sky: #ffffff;
+  --story-sky-soft: #d7ebf5;
+  --on-story-sky-soft: #18445c;
+
+  --story-brown: #6e4b32;
+  --story-brown-light: #a67c58;
+  --story-grass: #6f9c5e;
+  --story-grass-deep: #48733c;
+  --story-water: #5695b5;
+  --story-water-deep: #2f6987;
+  --story-cloud: #fffdf7;
+  --story-skin-mia: #f4c6a4;
+  --story-skin-oliver: #efc09a;
+  --story-hair-mia: #5b3722;
+  --story-hair-oliver: #8a4b22;
+  --story-road: #7b756b;
+  --story-road-line: #f5e6be;
+
+  --error: #b83230;
+  --on-error: #ffffff;
+
+  /* Data series */
+  --data-1: #2f6845;
+  --data-2: #b83c2e;
+  --data-3: #d19422;
+  --data-4: #3b7899;
+  --data-context: #b5b0a3;
+
+  /* Fonts */
+  --font-headline: 'Literata', serif;
+  --font-body: 'Nunito Sans', sans-serif;
+  --font-label: 'Geist Mono', monospace;
+
+  /* Shape */
+  --rounded: 0.75rem;
+  --rounded-lg: 1.25rem;
+  --rounded-full: 9999px;
+
+  /* Effects */
+  --shadow-soft: 0 6px 24px rgb(39 49 42 / 0.08);
+  --shadow-soft-hover: 0 10px 30px rgb(39 49 42 / 0.13);
+  --shadow-book: 0 14px 40px rgb(68 53 34 / 0.12), 0 2px 6px rgb(68 53 34 / 0.08);
+  --border-soft: 1px solid rgb(207 195 171 / 0.75);
+  --border-sketch: 2px dashed rgb(166 124 88 / 0.45);
+  --focus-glow: 0 0 0 4px rgb(47 104 69 / 0.22);
+
+  /* Shared semantic & foundation tokens */
+  --positive: #2f6845;
+  --positive-soft: #d8efe0;
+  --warning: #9e6215;
+  --warning-soft: #f5dfb0;
+  --focus: #2f6845;
+
+  /* Narrative Type Scale */
+  --display-size: clamp(2rem, 1.35rem + 2.4vw, 3.1rem);
+  --headline-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.15rem);
+  --subhead-size: clamp(1.125rem, 1.02rem + 0.5vw, 1.35rem);
+  --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.09375rem);
+  --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 140ms;
+  --dur-short: 240ms;
+  --dur-long: 460ms;
+}
+
+/* Base Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: 1.62;
+  background-image:
+    radial-gradient(circle at 14% 12%, rgb(245 223 176 / 0.38) 0%, transparent 42%),
+    radial-gradient(circle at 86% 18%, rgb(215 235 245 / 0.42) 0%, transparent 40%),
+    radial-gradient(circle at 50% 92%, rgb(216 239 224 / 0.35) 0%, transparent 45%);
+}
+header { position: static !important; }
+button, input, select, textarea { font-family: inherit; }
+
+/* Focus Visible */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* App Shell */
+.storybook-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg) var(--space-xl);
+  display: grid;
+  gap: var(--space-md);
+}
+.storybook-shell * { min-width: 0; }
+
+/* Storybook Masthead */
+.book-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  background: var(--surface-paper-white);
+  border: var(--border-soft);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-sm) var(--space-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.book-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.book-emblem {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--rounded);
+  background: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: var(--border-soft);
+}
+
+.book-title-group h1 {
+  font-family: var(--font-headline);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--on-surface);
+}
+
+.book-subtitle {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tertiary);
+  margin: 0;
+}
+
+.book-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--rounded-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  border: var(--border-soft);
+  min-height: 44px;
+}
+
+.status-pill.is-stars {
+  background: var(--story-mustard-soft);
+  color: var(--story-mustard-deep);
+}
+
+.status-pill.is-stickers {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.status-pill-btn {
+  cursor: pointer;
+  transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+}
+.status-pill-btn:hover {
+  transform: translateY(-1px);
+  background: var(--surface-container);
+}
+
+/* Chapter Almanac Strip */
+.chapter-ribbon {
+  background: var(--surface-container-low);
+  border-radius: var(--rounded);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  border: var(--border-soft);
+  overflow-x: auto;
+}
+
+.ribbon-label {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+}
+
+.ribbon-steps {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ribbon-step-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 10px;
+  border-radius: var(--rounded);
+  border: 1px solid transparent;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+}
+
+.ribbon-step-btn:hover {
+  background: var(--surface-container-high);
+  transform: translateY(-1px);
+}
+
+.ribbon-step-btn.is-current {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.ribbon-step-btn.is-done {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+/* Main Storybook Page Spread */
+.storybook-spread {
+  background: var(--surface-paper-white);
+  border-radius: var(--rounded-lg);
+  border: 1px solid var(--outline-variant);
+  box-shadow: var(--shadow-book);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+  min-height: 540px;
+}
+
+.storybook-spread::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: var(--border-sketch);
+  border-radius: calc(var(--rounded-lg) - 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spread-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-lg);
+  animation: pageTurnIn var(--dur-long) var(--ease-out);
+}
+
+@keyframes pageTurnIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography inside Spread */
+.page-kicker {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--story-red);
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.page-heading {
+  font-family: var(--font-headline);
+  font-size: var(--headline-size);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--on-surface);
+}
+
+.display-heading {
+  font-family: var(--font-headline);
+  font-size: var(--display-size);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--on-surface);
+}
+
+.page-lead {
+  font-size: var(--body-size);
+  color: var(--on-surface-variant);
+  max-width: 65ch;
+  margin: var(--space-sm) 0 0;
+}
+
+.story-quote {
+  background: var(--story-mustard-soft);
+  color: var(--story-mustard-deep);
+  border-left: 4px solid var(--story-mustard);
+  border-radius: 0 var(--rounded) var(--rounded) 0;
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-headline);
+  font-style: italic;
+  font-size: var(--subhead-size);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--rounded);
+  border: 1px solid transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--on-primary-container);
+}
+
+.btn-red {
+  background: var(--story-red);
+  color: var(--on-story-red);
+}
+
+.btn-sky {
+  background: var(--story-sky);
+  color: var(--on-story-sky);
+}
+
+.btn-mustard {
+  background: var(--story-mustard-soft);
+  color: var(--story-mustard-deep);
+  border-color: var(--story-mustard);
+}
+
+.btn-secondary {
+  background: var(--surface-container);
+  color: var(--on-surface);
+  border-color: var(--outline-variant);
+}
+
+.btn-lg {
+  min-height: 52px;
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  border-radius: var(--rounded-full);
+}
+
+/* Illustrated Stage Frame */
+.scene-canvas {
+  background: var(--surface-container-low);
+  border-radius: var(--rounded-lg);
+  border: var(--border-soft);
+  overflow: hidden;
+  position: relative;
+}
+
+.scene-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Animated Storybook Environmental Elements */
+@keyframes floatCloud {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(22px); }
+}
+@keyframes flyBird {
+  0%, 100% { transform: translate(0px, 0px); }
+  50% { transform: translate(18px, -7px); }
+}
+@keyframes driveAcross {
+  0% { transform: translateX(-110px); }
+  100% { transform: translateX(880px); }
+}
+@keyframes driveTrain {
+  0% { transform: translateX(880px); }
+  100% { transform: translateX(-220px); }
+}
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes propellerSpin {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.2); }
+  100% { transform: scaleX(1); }
+}
+
+.anim-cloud { animation: floatCloud 11s ease-in-out infinite; }
+.anim-cloud-slow { animation: floatCloud 16s ease-in-out infinite reverse; }
+.anim-bird { animation: flyBird 5.5s ease-in-out infinite; }
+.anim-bus-loop { animation: driveAcross 13s linear infinite; }
+.anim-train-loop { animation: driveTrain 17s linear infinite; }
+.anim-bob { animation: gentleBob 3.2s ease-in-out infinite; }
+
+/* Companion Selector */
+.companion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.companion-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--surface-container-low);
+  border: 2px solid var(--outline-variant);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md);
+  cursor: pointer;
+  text-align: left;
+  transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+}
+.companion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+.companion-card.is-selected {
+  background: var(--primary-container);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Split Layouts (70% Visual / 30% Learning Controls) */
+.split-visual-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.two-col-equal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Cards & Learning Panels */
+.story-card {
+  background: var(--surface-container-low);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-lg);
+  border: var(--border-soft);
+}
+.story-card.is-leaf {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.story-card.is-sky {
+  background: var(--story-sky-soft);
+  color: var(--on-story-sky-soft);
+}
+.story-card.is-mustard {
+  background: var(--story-mustard-soft);
+  color: var(--story-mustard-deep);
+}
+.story-card.is-red {
+  background: var(--story-red-soft);
+  color: var(--on-story-red-soft);
+}
+
+/* Vehicle Grid & Tabs */
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tab-btn {
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--rounded-full);
+  border: var(--border-soft);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.tab-btn:hover { background: var(--surface-container); }
+.tab-btn.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: var(--space-sm);
+}
+
+.vehicle-tile {
+  background: var(--surface-paper-white);
+  border: 2px solid var(--outline-variant);
+  border-radius: var(--rounded);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  min-height: 108px;
+  text-align: center;
+  transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+}
+.vehicle-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  background: var(--surface-container-low);
+}
+.vehicle-tile.is-selected {
+  background: var(--primary-container);
+  border-color: var(--primary);
+}
+.vehicle-tile.is-discovered {
+  box-shadow: inset 0 -3px 0 var(--story-mustard);
+}
+
+.vehicle-tile-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--on-surface);
+}
+.vehicle-tile-id {
+  font-size: 0.76rem;
+  color: var(--on-surface-variant);
+}
+
+/* Audio & Feedback Pills */
+.audio-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.feedback-banner {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--rounded);
+  font-weight: 700;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.feedback-banner.is-success {
+  background: var(--positive-soft);
+  color: var(--on-primary-container);
+}
+.feedback-banner.is-warn {
+  background: var(--warning-soft);
+  color: var(--on-tertiary-container);
+}
+.feedback-banner.is-info {
+  background: var(--story-sky-soft);
+  color: var(--on-story-sky-soft);
+}
+
+/* Speech Bubble */
+.speech-bubble {
+  position: relative;
+  background: var(--surface-paper-white);
+  border: 2px solid var(--outline-variant);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-soft);
+}
+.speech-bubble-en {
+  font-family: var(--font-headline);
+  font-size: var(--subhead-size);
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 4px;
+}
+.speech-bubble-id {
+  font-size: 0.9rem;
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+/* Chat Messenger UI */
+.chat-phone {
+  background: var(--surface-paper-white);
+  border: 2px solid var(--outline-variant);
+  border-radius: var(--rounded-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.chat-topbar {
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+}
+.chat-messages {
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  background: var(--surface-container-low);
+  max-height: 360px;
+  overflow-y: auto;
+}
+.chat-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.chat-row.is-right {
+  flex-direction: row-reverse;
+}
+.chat-bubble-btn {
+  max-width: 82%;
+  text-align: left;
+  background: var(--surface-paper-white);
+  border: var(--border-soft);
+  border-radius: 16px 16px 16px 4px;
+  padding: 10px 14px;
+  cursor: pointer;
+  color: var(--on-surface);
+  transition: transform var(--dur-micro) var(--ease-out);
+}
+.chat-bubble-btn:hover { transform: translateY(-1px); }
+.chat-row.is-right .chat-bubble-btn {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border-radius: 16px 16px 4px 16px;
+}
+.chat-sender {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Interactive Map Hotspots */
+.map-container {
+  position: relative;
+  min-height: 360px;
+}
+
+.map-node-btn {
+  cursor: pointer;
+  transition: transform var(--dur-short) var(--ease-out);
+}
+.map-node-btn:hover {
+  transform: scale(1.06);
+}
+
+/* Mini Games Word Chips & Memory Cards */
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.word-chip {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: var(--rounded-full);
+  border: 2px solid var(--primary);
+  background: var(--surface-paper-white);
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+.word-chip.is-used {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+.memory-card {
+  min-height: 86px;
+  border-radius: var(--rounded);
+  border: 2px solid var(--outline-variant);
+  background: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px;
+}
+.memory-card.is-flipped,
+.memory-card.is-matched {
+  background: var(--surface-paper-white);
+  border-color: var(--primary);
+  color: var(--on-surface);
+}
+.memory-card.is-matched {
+  background: var(--primary-container);
+}
+
+/* Stickers & Certificate */
+.sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: var(--space-md);
+}
+.sticker-badge {
+  background: var(--surface-container-low);
+  border: 2px dashed var(--outline-variant);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md);
+  text-align: center;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  opacity: 0.62;
+}
+.sticker-badge.is-unlocked {
+  opacity: 1;
+  border-style: solid;
+  border-color: var(--story-mustard);
+  background: var(--story-mustard-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.certificate-frame {
+  background: var(--surface-paper-white);
+  border: 6px double var(--story-mustard);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  display: grid;
+  gap: var(--space-md);
+  justify-items: center;
+}
+
+/* Inputs with Visible Labels */
+.field-group {
+  display: grid;
+  gap: 6px;
+}
+.field-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--on-surface);
+}
+.text-input {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: var(--rounded);
+  border: 2px solid var(--outline);
+  background: var(--surface-paper-white);
+  color: var(--on-surface);
+  font-size: 1rem;
+  width: 100%;
+}
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: end;
+}
+.input-row .field-group {
+  flex: 1 1 220px;
+}
+
+/* Persistent Storybook Page Footer Navigation */
+.book-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  background: var(--surface-paper-white);
+  border: var(--border-soft);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.page-counter-label {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .split-visual-lead,
+  .two-col-equal {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .storybook-shell {
+    padding: var(--space-sm);
+  }
+  .storybook-spread {
+    padding: var(--space-md);
+  }
+  .book-header,
+  .book-footer-nav {
+    padding: var(--space-sm) var(--space-md);
+  }
+  .memory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Shared Watercolor & Paper Texture SVG Filters -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="watercolor-soft" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <linearGradient id="sky-wash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--story-sky-soft)"/>
+      <stop offset="100%" stop-color="var(--surface-paper-white)"/>
+    </linearGradient>
+    <linearGradient id="meadow-wash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--primary-container)"/>
+      <stop offset="100%" stop-color="var(--surface-container-low)"/>
+    </linearGradient>
+    <linearGradient id="sea-wash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--story-sky-soft)"/>
+      <stop offset="100%" stop-color="var(--story-water)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="storybook-shell">
+  <!-- Header -->
+  <header class="book-header">
+    <div class="book-brand">
+      <div class="book-emblem" aria-hidden="true">
+        <i data-lucide="book-open"></i>
+      </div>
+      <div class="book-title-group">
+        <h1>The Little Transportation Adventure</h1>
+        <p class="book-subtitle">Buku Cerita Interaktif Bahasa Inggris • CEFR A1–A2</p>
+      </div>
+    </div>
+
+    <div class="book-status-bar">
+      <button type="button" class="status-pill status-pill-btn" id="hdr-companion-btn" onclick="goToPage(0)" title="Ganti teman petualangan">
+        <span id="hdr-companion-name">Mia</span>
+      </button>
+      <div class="status-pill is-stars" aria-label="Bintang terkumpul">
+        <i data-lucide="star" aria-hidden="true"></i>
+        <span id="hdr-stars">0</span> Bintang
+      </div>
+      <button type="button" class="status-pill is-stickers status-pill-btn" onclick="goToPage(10)">
+        <i data-lucide="award" aria-hidden="true"></i>
+        <span id="hdr-stickers">0</span>/8 Stiker
+      </button>
+      <button type="button" class="status-pill status-pill-btn" onclick="goToPage(1)">
+        <i data-lucide="map" aria-hidden="true"></i>
+        Peta
+      </button>
+    </div>
+  </header>
+
+  <!-- Chapter Almanac Strip -->
+  <nav class="chapter-ribbon" aria-label="Navigasi Halaman Buku Cerita">
+    <span class="ribbon-label">Halaman Cerita</span>
+    <div class="ribbon-steps" id="chapter-ribbon-steps"></div>
+  </nav>
+
+  <!-- Main Storybook Spread -->
+  <main class="storybook-spread" id="storybook-stage" aria-live="polite"></main>
+
+  <!-- Bottom Page Turn Navigation -->
+  <footer class="book-footer-nav">
+    <button type="button" class="btn btn-secondary" id="btn-prev-page" onclick="prevPage()">
+      <i data-lucide="arrow-left" aria-hidden="true"></i>
+      <span>Sebelumnya</span>
+    </button>
+
+    <div class="page-counter-label" id="footer-page-indicator">
+      Halaman 1 dari 11 — Pembuka Cerita
+    </div>
+
+    <button type="button" class="btn btn-primary" id="btn-next-page" onclick="nextPage()">
+      <span id="btn-next-label">Berikutnya</span>
+      <i data-lucide="arrow-right" aria-hidden="true"></i>
+    </button>
+  </footer>
+</div>
+
+<api-shim></api-shim>
+
+<script>
+// ============================================================
+// 1. DATA MODEL (Backtick template literals for safe strings)
+// ============================================================
+
+const PAGES = [
+  { id: `intro`, short: `1`, title: `Pembuka Cerita`, enTitle: `A Journey Begins!` },
+  { id: `map`, short: `2`, title: `Peta Cerita`, enTitle: `Interactive Story Map` },
+  { id: `garden`, short: `3`, title: `Taman Kendaraan`, enTitle: `Vehicle Discovery Garden` },
+  { id: `how`, short: `4`, title: `Berangkat Sekolah`, enTitle: `How Do You Travel?` },
+  { id: `road`, short: `5`, title: `Jalan & Stasiun`, enTitle: `Busy Road & Railway` },
+  { id: `harbor`, short: `6`, title: `Pelabuhan & Bandara`, enTitle: `Harbor & Magical Airport` },
+  { id: `chat`, short: `7`, title: `Petualangan Obrolan`, enTitle: `Transportation Chat` },
+  { id: `mission`, short: `8`, title: `Misi Perjalanan`, enTitle: `Let's Plan a Journey!` },
+  { id: `school`, short: `9`, title: `Gerbang Sekolah`, enTitle: `How Do You Come to School?` },
+  { id: `games`, short: `10`, title: `Taman Mini-Game`, enTitle: `Mini-Games Funfair` },
+  { id: `awards`, short: `11`, title: `Buku Stiker & Sertifikat`, enTitle: `Stickers & Certificate` }
+];
+
+const VEHICLES = [
+  // LAND (11)
+  { id: `car`, cat: `land`, en: `Car`, idName: `Mobil`, phonetic: `/kɑːr/`, sentence: `We go to the park by car.`, sentenceId: `Kami pergi ke taman naik mobil.`, fact: `A car usually has four wheels and seats for a family!`, factId: `Mobil biasanya punya empat roda dan kursi untuk satu keluarga!`, color: `var(--story-red)` },
+  { id: `bus`, cat: `land`, en: `Bus`, idName: `Bus`, phonetic: `/bʌs/`, sentence: `I go to school by bus.`, sentenceId: `Aku berangkat ke sekolah naik bus.`, fact: `A bus can carry many people together!`, factId: `Bus bisa mengangkut banyak orang sekaligus!`, color: `var(--story-red)` },
+  { id: `bicycle`, cat: `land`, en: `Bicycle`, idName: `Sepeda`, phonetic: `/ˈbaɪ.sɪ.kəl/`, sentence: `Oliver goes to school by bicycle.`, sentenceId: `Oliver pergi ke sekolah naik sepeda.`, fact: `A bicycle uses pedal power and keeps the air clean!`, factId: `Sepeda digerakkan dengan kayuhan dan menjaga udara tetap bersih!`, color: `var(--primary)` },
+  { id: `motorcycle`, cat: `land`, en: `Motorcycle`, idName: `Sepeda motor`, phonetic: `/ˈmoʊ.tər.saɪ.kəl/`, sentence: `My uncle goes to work by motorcycle.`, sentenceId: `Pamanku pergi bekerja naik sepeda motor.`, fact: `Always wear a helmet when riding a motorcycle!`, factId: `Selalu pakai helm saat naik sepeda motor!`, color: `var(--story-sky)` },
+  { id: `train`, cat: `land`, en: `Train`, idName: `Kereta api`, phonetic: `/treɪn/`, sentence: `We travel to another city by train.`, sentenceId: `Kami bepergian ke kota lain naik kereta api.`, fact: `A train moves swiftly along steel railway tracks!`, factId: `Kereta api melaju cepat di atas rel baja!`, color: `var(--primary)` },
+  { id: `taxi`, cat: `land`, en: `Taxi`, idName: `Taksi`, phonetic: `/ˈtæk.si/`, sentence: `I go to the airport by taxi.`, sentenceId: `Aku pergi ke bandara naik taksi.`, fact: `You can call a taxi to take you straight to a place!`, factId: `Kamu bisa memanggil taksi untuk mengantarmu langsung ke tujuan!`, color: `var(--story-mustard)` },
+  { id: `truck`, cat: `land`, en: `Truck`, idName: `Truk`, phonetic: `/trʌk/`, sentence: `The big truck carries fresh fruit.`, sentenceId: `Truk besar itu mengangkut buah segar.`, fact: `Trucks are strong vehicles built to carry heavy boxes!`, factId: `Truk adalah kendaraan kuat untuk mengangkut barang berat!`, color: `var(--story-brown)` },
+  { id: `van`, cat: `land`, en: `Van`, idName: `Mobil van`, phonetic: `/væn/`, sentence: `The school van picks up six friends.`, sentenceId: `Mobil van sekolah menjemput enam teman.`, fact: `A van is taller than a car and has roomy seats inside!`, factId: `Van lebih tinggi dari mobil biasa dan punya ruang luas di dalam!`, color: `var(--story-sky)` },
+  { id: `scooter`, cat: `land`, en: `Scooter`, idName: `Skuter`, phonetic: `/ˈskuː.tər/`, sentence: `Mia rides her scooter in the park.`, sentenceId: `Mia mengendarai skuternya di taman.`, fact: `A scooter has small wheels and is easy to steer!`, factId: `Skuter memiliki roda kecil dan mudah dikemudikan!`, color: `var(--story-mustard)` },
+  { id: `ambulance`, cat: `land`, en: `Ambulance`, idName: `Ambulans`, phonetic: `/ˈæm.bjə.ləns/`, sentence: `The ambulance helps sick people quickly.`, sentenceId: `Ambulans membantu orang sakit dengan cepat.`, fact: `An ambulance has a bright siren so cars let it pass!`, factId: `Ambulans punya sirene agar kendaraan lain memberi jalan!`, color: `var(--story-red)` },
+  { id: `firetruck`, cat: `land`, en: `Fire truck`, idName: `Mobil pemadam`, phonetic: `/ˈfaɪr trʌk/`, sentence: `The red fire truck carries water and ladders.`, sentenceId: `Mobil pemadam merah membawa air dan tangga.`, fact: `Firefighters ride fire trucks to keep Little Town safe!`, factId: `Petugas pemadam mengendarai mobil pemadam untuk menjaga kota tetap aman!`, color: `var(--story-red)` },
+
+  // WATER (4)
+  { id: `boat`, cat: `water`, en: `Boat`, idName: `Perahu`, phonetic: `/boʊt/`, sentence: `The wooden boat sails on the river.`, sentenceId: `Perahu kayu itu berlayar di sungai.`, fact: `Small boats use paddles, sails, or small motors!`, factId: `Perahu kecil menggunakan dayung, layar, atau mesin kecil!`, color: `var(--story-brown)` },
+  { id: `ship`, cat: `water`, en: `Ship`, idName: `Kapal besar`, phonetic: `/ʃɪp/`, sentence: `A giant ship crosses the blue sea.`, sentenceId: `Kapal besar menyeberangi lautan biru.`, fact: `A ship is much larger than a boat and sails on oceans!`, factId: `Kapal jauh lebih besar daripada perahu dan berlayar di samudra!`, color: `var(--story-sky)` },
+  { id: `ferry`, cat: `water`, en: `Ferry`, idName: `Kapal feri`, phonetic: `/ˈfer.i/`, sentence: `Cars and people cross the water by ferry.`, sentenceId: `Mobil dan penumpang menyeberangi air naik feri.`, fact: `A ferry can carry passengers, bicycles, and cars!`, factId: `Kapal feri bisa mengangkut penumpang, sepeda, dan mobil!`, color: `var(--primary)` },
+  { id: `submarine`, cat: `water`, en: `Submarine`, idName: `Kapal selam`, phonetic: `/ˌsʌb.məˈriːn/`, sentence: `The yellow submarine travels under the water.`, sentenceId: `Kapal selam kuning bergerak di bawah permukaan air.`, fact: `A submarine uses sonar sounds to see underwater!`, factId: `Kapal selam menggunakan gelombang suara sonar untuk melihat di bawah laut!`, color: `var(--story-mustard)` },
+
+  // AIR (3)
+  { id: `airplane`, cat: `air`, en: `Airplane`, idName: `Pesawat terbang`, phonetic: `/ˈer.pleɪn/`, sentence: `The airplane flies high in the sky.`, sentenceId: `Pesawat terbang tinggi di angkasa.`, fact: `The airplane is much faster than the bus or train!`, factId: `Pesawat terbang jauh lebih cepat daripada bus atau kereta!`, color: `var(--story-sky)` },
+  { id: `helicopter`, cat: `air`, en: `Helicopter`, idName: `Helikopter`, phonetic: `/ˈhel.ɪ.kɑːp.tər/`, sentence: `A helicopter can hover above the hills.`, sentenceId: `Helikopter bisa melayang diam di atas bukit.`, fact: `Spinning top blades lift a helicopter straight up!`, factId: `Baling-baling di atas mengangkat helikopter lurus ke atas!`, color: `var(--story-red)` },
+  { id: `hotairballoon`, cat: `air`, en: `Hot air balloon`, idName: `Balon udara`, phonetic: `/hɑːt er bəˈluːn/`, sentence: `We float gently in a hot air balloon.`, sentenceId: `Kami melayang lembut di balon udara panas.`, fact: `Warm air inside the colorful balloon makes it rise!`, factId: `Udara hangat di dalam balon warna-warni membuatnya terangkat naik!`, color: `var(--story-mustard)` }
+];
+
+const STICKERS = [
+  { id: `bus_explorer`, name: `Little Bus Explorer`, desc: `Menjelajahi kendaraan di Taman Penemuan`, icon: `bus`, color: `var(--story-red)` },
+  { id: `school_traveler`, name: `School Traveler`, desc: `Mempraktikkan "go to school" di Bab 2`, icon: `compass`, color: `var(--primary)` },
+  { id: `road_ranger`, name: `Road & Rail Ranger`, desc: `Menemukan kendaraan di Jalan & Stasiun`, icon: `train-front`, color: `var(--story-mustard)` },
+  { id: `sky_harbor`, name: `Harbor & Sky Explorer`, desc: `Berlayar di Pelabuhan & terbang di Bandara`, icon: `plane`, color: `var(--story-sky)` },
+  { id: `chat_buddy`, name: `Chat Buddy`, desc: `Menyelesaikan obrolan dengan Mia & Oliver`, icon: `message-circle`, color: `var(--primary)` },
+  { id: `journey_planner`, name: `Journey Planner`, desc: `Menuntaskan semua misi perjalanan di peta`, icon: `map-pin`, color: `var(--story-red)` },
+  { id: `school_star`, name: `School Star`, desc: `Menjawab "How do you come to school?"`, icon: `graduation-cap`, color: `var(--story-mustard)` },
+  { id: `transport_master`, name: `Transportation Master`, desc: `Menang di Taman Mini-Game`, icon: `trophy`, color: `var(--primary)` }
+];
+
+const MAP_DESTINATIONS = [
+  { page: 2, num: 1, name: `Little Town`, sub: `Taman Kendaraan`, x: 145, y: 235, badge: `Darat, Air, Udara`, color: `var(--story-red)` },
+  { page: 4, num: 2, name: `The Busy Road`, sub: `Jalan Raya Ramai`, x: 315, y: 170, badge: `Mobil, Bus, Sepeda`, color: `var(--story-mustard)` },
+  { page: 4, num: 3, name: `Railway Station`, sub: `Stasiun Kereta`, x: 485, y: 115, badge: `Kereta Api`, color: `var(--primary)` },
+  { page: 5, num: 4, name: `The Harbor`, sub: `Pelabuhan Laut`, x: 645, y: 270, badge: `Perahu & Kapal`, color: `var(--story-sky)` },
+  { page: 5, num: 5, name: `The Airport`, sub: `Bandara Ajaib`, x: 700, y: 95, badge: `Pesawat & Balon`, color: `var(--story-red)` },
+  { page: 8, num: 6, name: `The School`, sub: `Gerbang Sekolah`, x: 430, y: 285, badge: `How do you come?`, color: `var(--primary)` }
+];
+
+// ============================================================
+// 2. PERSISTENT APP STATE
+// ============================================================
+let appState = {
+  companion: `mia`,
+  currentPage: 0,
+  highestPage: 0,
+  stars: 0,
+  stickers: [],
+  discoveredVehicles: [`bus`],
+  selectedVehicleId: `bus`,
+  vehicleCategory: `all`,
+  chapter2Mode: `bus`,
+  roadFoundCount: 0,
+  roadFoundIds: [],
+  roadQuizSolved: false,
+  harborBoat: `boat`,
+  harborSailed: false,
+  airportLaunched: false,
+  chatQuizIndex: 0,
+  chatQuizSolved: [false, false],
+  customChatFriend: `Oliver`,
+  customChatPlace: `the beach`,
+  customChatVehicle: `bus`,
+  missionsSolved: [false, false, false],
+  schoolClicked: [],
+  schoolMatchSolved: false,
+  personalSchoolMode: ``,
+  personalSchoolText: ``,
+  activeGame: `hunter`,
+  gamesWon: [],
+  learnerName: ``
+};
+
+let audioCtx = null;
+let transientMessage = ``;
+let transientType = `info`;
+
+// Game transient states (reset per session cleanly)
+let gameMemoryCards = [];
+let gameMemoryFlipped = [];
+let gameMemoryMatched = [];
+let gameSentenceBuilt = [];
+let gameSentenceIdx = 0;
+let gameSoundTarget = `train`;
+let gameListenTarget = `airplane`;
+let gameHunterTarget = `bus`;
+let gameClassifyQueue = [`bus`, `submarine`, `helicopter`, `bicycle`, `ferry`, `hotairballoon`];
+let gameClassifyIdx = 0;
+let gameOddIdx = 0;
+
+function getVehicle(id) {
+  return VEHICLES.find(function(v) { return v.id === id; }) || VEHICLES[0];
+}
+
+function saveState() {
+  if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+    window.notebookAppApi.setAppState(appState).catch(function() {});
+  }
+}
+
+function awardSticker(stickerId, starBonus) {
+  let changed = false;
+  if (appState.stickers.indexOf(stickerId) === -1) {
+    appState.stickers.push(stickerId);
+    appState.stars += (starBonus || 2);
+    changed = true;
+  }
+  if (changed) {
+    updateHeaderStats();
+    saveState();
+  }
+}
+
+function addStars(n) {
+  appState.stars += n;
+  updateHeaderStats();
+  saveState();
+}
+
+// ============================================================
+// 3. REAL FUNCTIONAL AUDIO (SpeechSynthesis + Web Audio API)
+// ============================================================
+function ensureAudioCtx() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!audioCtx) {
+    audioCtx = new Ctx();
+  }
+  if (audioCtx.state === `suspended`) {
+    audioCtx.resume().catch(function() {});
+  }
+  return audioCtx;
+}
+
+function speakEnglish(text, feedbackTargetId) {
+  const target = feedbackTargetId ? document.getElementById(feedbackTargetId) : null;
+  if (`speechSynthesis` in window && typeof SpeechSynthesisUtterance !== `undefined`) {
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = `en-US`;
+      utter.rate = 0.88;
+      utter.pitch = 1.04;
+      if (target) {
+        target.textContent = `🔊 Mengucapkan: "${text}"`;
+      }
+      utter.onend = function() {
+        if (target) {
+          target.textContent = `✓ Selesai diucapkan: "${text}"`;
+        }
+      };
+      window.speechSynthesis.speak(utter);
+      return;
+    } catch (e) {
+      // Fall through to gentle phonetic tone
+    }
+  }
+  playToneCue(523.25, 0.14);
+  if (target) {
+    target.textContent = `📖 Teks bacaan: "${text}" (aktifkan suara peramban untuk pelafalan otomatis)`;
+  }
+}
+
+function playToneCue(freq, dur) {
+  const ctx = ensureAudioCtx();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = `sine`;
+  osc.frequency.setValueAtTime(freq, now);
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.exponentialRampToValueAtTime(0.14, now + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + dur + 0.02);
+}
+
+function playSuccessSound() {
+  const ctx = ensureAudioCtx();
+  if (!ctx) return;
+  [523.25, 659.25, 783.99].forEach(function(f, idx) {
+    const now = ctx.currentTime + idx * 0.09;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = `triangle`;
+    osc.frequency.setValueAtTime(f, now);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.15, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.27);
+  });
+}
+
+function playTryAgainSound() {
+  const ctx = ensureAudioCtx();
+  if (!ctx) return;
+  [330, 262].forEach(function(f, idx) {
+    const now = ctx.currentTime + idx * 0.12;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = `sine`;
+    osc.frequency.setValueAtTime(f, now);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  });
+}
+
+function playVehicleSound(id) {
+  const ctx = ensureAudioCtx();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+
+  function noiseBurst(duration, filterFreq, gainVal, delay) {
+    const bufferSize = Math.floor(ctx.sampleRate * duration);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = `bandpass`;
+    filter.frequency.setValueAtTime(filterFreq, now + delay);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, now + delay);
+    gain.gain.exponentialRampToValueAtTime(gainVal, now + delay + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + duration);
+    src.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(now + delay);
+  }
+
+  function note(type, f1, f2, dur, vol, delay) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(f1, now + delay);
+    if (f2 !== f1) {
+      osc.frequency.exponentialRampToValueAtTime(f2, now + delay + dur);
+    }
+    gain.gain.setValueAtTime(0.001, now + delay);
+    gain.gain.exponentialRampToValueAtTime(vol, now + delay + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now + delay);
+    osc.stop(now + delay + dur + 0.03);
+  }
+
+  if (id === `bicycle` || id === `scooter`) {
+    // Ring-ring bell!
+    note(`sine`, 1880, 1880, 0.18, 0.14, 0);
+    note(`sine`, 2820, 2820, 0.18, 0.08, 0);
+    note(`sine`, 1880, 1880, 0.22, 0.14, 0.16);
+    note(`sine`, 2820, 2820, 0.22, 0.08, 0.16);
+  } else if (id === `car` || id === `taxi` || id === `van`) {
+    // Engine hum + double horn beep-beep
+    note(`sawtooth`, 88, 105, 0.55, 0.05, 0);
+    note(`triangle`, 440, 440, 0.12, 0.14, 0.15);
+    note(`triangle`, 554, 554, 0.12, 0.09, 0.15);
+    note(`triangle`, 440, 440, 0.18, 0.14, 0.33);
+    note(`triangle`, 554, 554, 0.18, 0.09, 0.33);
+  } else if (id === `bus` || id === `truck`) {
+    // Deep diesel rumble + air horn
+    note(`sawtooth`, 62, 68, 0.75, 0.07, 0);
+    note(`sawtooth`, 165, 165, 0.42, 0.11, 0.18);
+    note(`sawtooth`, 207, 207, 0.42, 0.09, 0.18);
+  } else if (id === `motorcycle`) {
+    // Revving vroom-vroom
+    note(`sawtooth`, 82, 210, 0.32, 0.11, 0);
+    note(`sawtooth`, 210, 110, 0.28, 0.09, 0.32);
+    note(`sawtooth`, 110, 240, 0.35, 0.11, 0.6);
+  } else if (id === `train`) {
+    // Chug + classic steam/train whistle chord
+    noiseBurst(0.14, 700, 0.12, 0);
+    noiseBurst(0.14, 700, 0.12, 0.18);
+    note(`triangle`, 392, 392, 0.55, 0.12, 0.36);
+    note(`triangle`, 493.88, 493.88, 0.55, 0.1, 0.36);
+    note(`triangle`, 587.33, 587.33, 0.55, 0.09, 0.36);
+  } else if (id === `ambulance` || id === `firetruck`) {
+    // Two-tone siren
+    note(`triangle`, 660, 660, 0.24, 0.13, 0);
+    note(`triangle`, 880, 880, 0.24, 0.13, 0.24);
+    note(`triangle`, 660, 660, 0.24, 0.13, 0.48);
+    note(`triangle`, 880, 880, 0.24, 0.13, 0.72);
+  } else if (id === `boat` || id === `ferry` || id === `ship`) {
+    // Boat/Ship foghorn + water splash
+    const baseFreq = id === `ship` ? 110 : 155;
+    noiseBurst(0.6, 500, 0.07, 0);
+    note(`sawtooth`, baseFreq, baseFreq * 0.96, 0.65, 0.12, 0.1);
+    note(`triangle`, baseFreq * 1.5, baseFreq * 1.45, 0.65, 0.08, 0.1);
+  } else if (id === `submarine`) {
+    // Sonar ping!
+    note(`sine`, 1320, 1315, 0.65, 0.18, 0);
+    note(`sine`, 1320, 1315, 0.45, 0.07, 0.45);
+  } else if (id === `airplane`) {
+    // Jet whoosh + friendly ding-dong
+    noiseBurst(0.85, 950, 0.14, 0);
+    note(`sine`, 587, 587, 0.18, 0.11, 0.55);
+    note(`sine`, 494, 494, 0.25, 0.11, 0.75);
+  } else if (id === `helicopter`) {
+    // Rotor chop chop chop
+    for (let i = 0; i < 6; i++) {
+      noiseBurst(0.08, 340, 0.16, i * 0.11);
+      note(`triangle`, 75, 58, 0.08, 0.11, i * 0.11);
+    }
+  } else if (id === `hotairballoon`) {
+    // Propane burner soft whoosh
+    noiseBurst(0.75, 420, 0.18, 0);
+  }
+}
+
+// ============================================================
+// 4. HAND-CRAFTED WATERCOLOR SVG ARTWORK HELPERS
+// ============================================================
+function renderCharacterSVG(who, size, waving) {
+  const s = size || 80;
+  const isMia = who === `mia`;
+  const hair = isMia ? `var(--story-hair-mia)` : `var(--story-hair-oliver)`;
+  const skin = isMia ? `var(--story-skin-mia)` : `var(--story-skin-oliver)`;
+  const shirt = isMia ? `var(--story-red)` : `var(--primary)`;
+  const accent = isMia ? `var(--story-mustard)` : `var(--story-sky)`;
+  const waveTransform = waving ? `transform="rotate(-18 52 56)"` : ``;
+
+  return `<svg width="${s}" height="${s}" viewBox="0 0 80 80" aria-hidden="true">
+    <circle cx="40" cy="42" r="35" fill="${isMia ? `var(--story-red-soft)` : `var(--primary-container)`}" opacity="0.65"/>
+    <!-- Body / Coat -->
+    <path d="M24 72 C24 54, 56 54, 56 72 Z" fill="${shirt}"/>
+    <path d="M32 58 L40 66 L48 58" fill="${accent}"/>
+    <!-- Waving Arm -->
+    <path d="M52 58 Q64 46 66 36" stroke="${shirt}" stroke-width="6" stroke-linecap="round" fill="none" ${waveTransform}/>
+    <circle cx="66" cy="36" r="4" fill="${skin}"/>
+    <!-- Head -->
+    <circle cx="40" cy="34" r="16" fill="${skin}"/>
+    ${isMia
+      ? `<path d="M23 32 C22 14, 58 14, 57 32 C54 24, 46 22, 40 24 C34 22, 26 24, 23 32 Z" fill="${hair}"/>
+         <circle cx="21" cy="31" r="6" fill="${hair}"/>
+         <circle cx="59" cy="31" r="6" fill="${hair}"/>
+         <circle cx="24" cy="24" r="3.5" fill="var(--story-mustard)"/>`
+      : `<path d="M24 30 C24 14, 56 14, 56 30 C52 22, 34 19, 24 30 Z" fill="${hair}"/>
+         <path d="M28 19 Q40 10 52 19" fill="var(--story-sky)"/>
+         <rect x="26" y="17" width="28" height="4" rx="2" fill="var(--story-mustard)"/>`
+    }
+    <!-- Rosy cheeks & Smile -->
+    <circle cx="32" cy="37" r="2.5" fill="var(--story-red-soft)"/>
+    <circle cx="48" cy="37" r="2.5" fill="var(--story-red-soft)"/>
+    <circle cx="35" cy="33" r="1.9" fill="var(--on-surface)"/>
+    <circle cx="45" cy="33" r="1.9" fill="var(--on-surface)"/>
+    <path d="M36 40 Q40 44 44 40" stroke="var(--on-surface)" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </svg>`;
+}
+
+function renderVehicleSVG(id, width, height) {
+  const w = width || 120;
+  const h = height || 80;
+  let art = ``;
+  if (id === `bus`) {
+    art = `
+      <rect x="14" y="20" width="92" height="42" rx="10" fill="var(--story-red)"/>
+      <rect x="20" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="42" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="64" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="86" y="26" width="14" height="22" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="14" y="45" width="92" height="6" fill="var(--story-mustard)"/>
+      <circle cx="34" cy="63" r="9" fill="var(--on-surface)"/><circle cx="34" cy="63" r="4" fill="var(--surface-container)"/>
+      <circle cx="84" cy="63" r="9" fill="var(--on-surface)"/><circle cx="84" cy="63" r="4" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `car`) {
+    art = `
+      <path d="M26 42 L38 25 L76 25 L88 42 Z" fill="var(--story-red)"/>
+      <path d="M40 28 L55 28 L55 40 L31 40 Z" fill="var(--story-sky-soft)"/>
+      <path d="M59 28 L73 28 L83 40 L59 40 Z" fill="var(--story-sky-soft)"/>
+      <rect x="16" y="40" width="88" height="20" rx="8" fill="var(--story-red)"/>
+      <circle cx="34" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="34" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="84" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="84" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `taxi`) {
+    art = `
+      <rect x="50" y="18" width="20" height="7" rx="2" fill="var(--on-surface)"/>
+      <path d="M26 42 L38 25 L76 25 L88 42 Z" fill="var(--story-mustard)"/>
+      <path d="M40 28 L55 28 L55 40 L31 40 Z" fill="var(--story-sky-soft)"/>
+      <path d="M59 28 L73 28 L83 40 L59 40 Z" fill="var(--story-sky-soft)"/>
+      <rect x="16" y="40" width="88" height="20" rx="8" fill="var(--story-mustard)"/>
+      <rect x="26" y="47" width="68" height="5" fill="var(--on-surface)" opacity="0.45"/>
+      <circle cx="34" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="34" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="84" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="84" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `bicycle`) {
+    art = `
+      <circle cx="34" cy="54" r="15" fill="none" stroke="var(--on-surface)" stroke-width="4"/>
+      <circle cx="86" cy="54" r="15" fill="none" stroke="var(--on-surface)" stroke-width="4"/>
+      <path d="M34 54 L54 34 L76 34 L86 54 M54 34 L60 54 L34 54 M76 34 L72 24 L82 24" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect x="46" y="28" width="14" height="5" rx="2.5" fill="var(--story-brown)"/>
+    `;
+  } else if (id === `motorcycle`) {
+    art = `
+      <circle cx="32" cy="55" r="13" fill="var(--on-surface)"/><circle cx="32" cy="55" r="6" fill="var(--surface-container)"/>
+      <circle cx="88" cy="55" r="13" fill="var(--on-surface)"/><circle cx="88" cy="55" r="6" fill="var(--surface-container)"/>
+      <path d="M30 48 Q45 34 64 38 L78 28 L88 55" stroke="var(--story-sky)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <ellipse cx="48" cy="36" rx="14" ry="6" fill="var(--story-brown)"/>
+      <circle cx="80" cy="31" r="5" fill="var(--story-mustard)"/>
+    `;
+  } else if (id === `train`) {
+    art = `
+      <rect x="14" y="24" width="92" height="34" rx="8" fill="var(--primary)"/>
+      <rect x="24" y="14" width="14" height="12" rx="3" fill="var(--story-red)"/>
+      <circle cx="30" cy="9" r="5" fill="var(--outline-variant)"/>
+      <circle cx="41" cy="7" r="4" fill="var(--outline-variant)" opacity="0.7"/>
+      <rect x="22" y="31" width="18" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="46" y="31" width="18" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="70" y="31" width="24" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="14" y="50" width="92" height="5" fill="var(--story-mustard)"/>
+      <circle cx="30" cy="63" r="7" fill="var(--on-surface)"/>
+      <circle cx="52" cy="63" r="7" fill="var(--on-surface)"/>
+      <circle cx="74" cy="63" r="7" fill="var(--on-surface)"/>
+      <circle cx="94" cy="63" r="7" fill="var(--on-surface)"/>
+    `;
+  } else if (id === `truck`) {
+    art = `
+      <rect x="14" y="22" width="56" height="36" rx="5" fill="var(--story-brown)"/>
+      <path d="M70 30 L94 30 L104 42 L104 58 L70 58 Z" fill="var(--story-mustard)"/>
+      <rect x="76" y="34" width="18" height="12" rx="2" fill="var(--story-sky-soft)"/>
+      <circle cx="32" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="32" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="56" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="56" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="90" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="90" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `van`) {
+    art = `
+      <path d="M18 58 L18 30 Q18 22 28 22 L78 22 Q94 22 102 40 L102 58 Z" fill="var(--story-sky)"/>
+      <rect x="26" y="28" width="20" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="52" y="28" width="20" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <path d="M78 28 L88 28 L96 42 L78 42 Z" fill="var(--story-sky-soft)"/>
+      <circle cx="36" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="36" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="84" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="84" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `scooter`) {
+    art = `
+      <circle cx="34" cy="60" r="9" fill="var(--on-surface)"/>
+      <circle cx="84" cy="60" r="9" fill="var(--on-surface)"/>
+      <path d="M34 60 L78 60 L72 24 L62 22" stroke="var(--story-mustard)" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <rect x="38" y="54" width="38" height="6" rx="3" fill="var(--story-red)"/>
+    `;
+  } else if (id === `ambulance`) {
+    art = `
+      <path d="M16 58 L16 24 L76 24 L98 40 L102 58 Z" fill="var(--surface-paper-white)" stroke="var(--outline)" stroke-width="2"/>
+      <rect x="44" y="17" width="12" height="7" rx="3" fill="var(--story-red)"/>
+      <rect x="38" y="34" width="18" height="6" rx="1.5" fill="var(--story-red)"/>
+      <rect x="44" y="28" width="6" height="18" rx="1.5" fill="var(--story-red)"/>
+      <path d="M74 28 L88 40 L74 40 Z" fill="var(--story-sky-soft)"/>
+      <circle cx="34" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="34" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="84" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="84" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `firetruck`) {
+    art = `
+      <rect x="14" y="28" width="90" height="30" rx="6" fill="var(--story-red)"/>
+      <rect x="20" y="18" width="52" height="7" rx="2" fill="var(--surface-container)"/>
+      <rect x="78" y="32" width="18" height="14" rx="3" fill="var(--story-sky-soft)"/>
+      <rect x="24" y="36" width="44" height="12" rx="3" fill="var(--story-mustard)"/>
+      <circle cx="34" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="34" cy="61" r="3.5" fill="var(--surface-container)"/>
+      <circle cx="84" cy="61" r="8.5" fill="var(--on-surface)"/><circle cx="84" cy="61" r="3.5" fill="var(--surface-container)"/>
+    `;
+  } else if (id === `boat`) {
+    art = `
+      <path d="M20 48 L100 48 L88 64 L32 64 Z" fill="var(--story-brown)"/>
+      <path d="M58 14 L58 46 L30 44 Z" fill="var(--story-mustard)"/>
+      <path d="M62 18 L62 46 L86 44 Z" fill="var(--story-red)"/>
+      <path d="M10 66 Q30 60 50 66 T90 66 T110 66" stroke="var(--story-sky)" stroke-width="3" fill="none"/>
+    `;
+  } else if (id === `ship`) {
+    art = `
+      <rect x="44" y="16" width="12" height="16" fill="var(--story-red)"/>
+      <rect x="30" y="28" width="56" height="18" rx="4" fill="var(--surface-paper-white)" stroke="var(--outline)" stroke-width="1.5"/>
+      <circle cx="42" cy="36" r="3.5" fill="var(--story-sky)"/><circle cx="54" cy="36" r="3.5" fill="var(--story-sky)"/><circle cx="66" cy="36" r="3.5" fill="var(--story-sky)"/>
+      <path d="M14 44 L106 44 L94 64 L26 64 Z" fill="var(--story-sky)"/>
+      <path d="M10 67 Q30 61 50 67 T90 67 T110 67" stroke="var(--story-water-deep)" stroke-width="3" fill="none"/>
+    `;
+  } else if (id === `ferry`) {
+    art = `
+      <rect x="24" y="24" width="72" height="22" rx="6" fill="var(--primary)"/>
+      <rect x="32" y="30" width="14" height="10" rx="2" fill="var(--story-sky-soft)"/>
+      <rect x="52" y="30" width="14" height="10" rx="2" fill="var(--story-sky-soft)"/>
+      <rect x="72" y="30" width="14" height="10" rx="2" fill="var(--story-sky-soft)"/>
+      <path d="M14 46 L106 46 L96 63 L24 63 Z" fill="var(--story-mustard)"/>
+      <path d="M10 66 Q30 60 50 66 T90 66 T110 66" stroke="var(--story-sky)" stroke-width="3" fill="none"/>
+    `;
+  } else if (id === `submarine`) {
+    art = `
+      <path d="M54 24 L54 14 L64 14" stroke="var(--on-surface)" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <rect x="44" y="24" width="24" height="14" rx="4" fill="var(--story-mustard)"/>
+      <ellipse cx="60" cy="46" rx="40" ry="15" fill="var(--story-mustard)"/>
+      <circle cx="42" cy="46" r="5" fill="var(--story-sky-soft)" stroke="var(--on-surface)" stroke-width="2"/>
+      <circle cx="60" cy="46" r="5" fill="var(--story-sky-soft)" stroke="var(--on-surface)" stroke-width="2"/>
+      <circle cx="78" cy="46" r="5" fill="var(--story-sky-soft)" stroke="var(--on-surface)" stroke-width="2"/>
+      <rect x="14" y="42" width="7" height="9" rx="2" fill="var(--story-red)"/>
+    `;
+  } else if (id === `airplane`) {
+    art = `
+      <path d="M16 42 L32 24 L42 24 L36 42 L92 40 Q106 41 106 47 Q106 53 92 54 L26 54 Z" fill="var(--surface-paper-white)" stroke="var(--story-sky)" stroke-width="2.5"/>
+      <path d="M48 45 L68 24 L78 24 L66 45 Z" fill="var(--story-red)"/>
+      <path d="M52 50 L68 68 L58 68 L44 50 Z" fill="var(--story-sky)"/>
+      <circle cx="52" cy="46" r="2.8" fill="var(--story-sky)"/>
+      <circle cx="63" cy="46" r="2.8" fill="var(--story-sky)"/>
+      <circle cx="74" cy="46" r="2.8" fill="var(--story-sky)"/>
+    `;
+  } else if (id === `helicopter`) {
+    art = `
+      <line x1="20" y1="18" x2="94" y2="18" stroke="var(--on-surface)" stroke-width="4" stroke-linecap="round"/>
+      <line x1="57" y1="18" x2="57" y2="28" stroke="var(--on-surface)" stroke-width="4"/>
+      <path d="M36 44 L14 38 L14 50 Z" fill="var(--story-red)"/>
+      <ellipse cx="62" cy="42" rx="26" ry="15" fill="var(--story-red)"/>
+      <path d="M62 30 Q84 30 85 44 L62 44 Z" fill="var(--story-sky-soft)"/>
+      <path d="M44 62 L80 62 M50 56 L50 62 M74 56 L74 62" stroke="var(--on-surface)" stroke-width="3" stroke-linecap="round"/>
+    `;
+  } else if (id === `hotairballoon`) {
+    art = `
+      <path d="M60 8 C36 8, 28 32, 48 52 L72 52 C92 32, 84 8, 60 8 Z" fill="var(--story-red)"/>
+      <path d="M60 8 C47 12, 45 34, 54 52 L66 52 C75 34, 73 12, 60 8 Z" fill="var(--story-mustard)"/>
+      <line x1="50" y1="52" x2="53" y2="62" stroke="var(--story-brown)" stroke-width="2"/>
+      <line x1="70" y1="52" x2="67" y2="62" stroke="var(--story-brown)" stroke-width="2"/>
+      <rect x="50" y="62" width="20" height="12" rx="3" fill="var(--story-brown)"/>
+    `;
+  }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 120 80" aria-hidden="true">${art}</svg>`;
+}
+
+// ============================================================
+// 5. PAGE RENDERERS (11 STORYBOOK CHAPTERS)
+// ============================================================
+function renderCurrentPage() {
+  const stage = document.getElementById(`storybook-stage`);
+  if (!stage) return;
+
+  const p = appState.currentPage;
+  let html = ``;
+  if (p === 0) html = renderPage0Intro();
+  else if (p === 1) html = renderPage1Map();
+  else if (p === 2) html = renderPage2Garden();
+  else if (p === 3) html = renderPage3HowTravel();
+  else if (p === 4) html = renderPage4RoadRail();
+  else if (p === 5) html = renderPage5HarborAir();
+  else if (p === 6) html = renderPage6Chat();
+  else if (p === 7) html = renderPage7Missions();
+  else if (p === 8) html = renderPage8SchoolGate();
+  else if (p === 9) html = renderPage9Games();
+  else if (p === 10) html = renderPage10Awards();
+
+  stage.innerHTML = `<div class="spread-inner">${html}</div>`;
+  updateHeaderStats();
+  updateRibbon();
+  updateFooterNav();
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+}
+
+// ---------------- PAGE 0: OPENING STORY ----------------
+function renderPage0Intro() {
+  const comp = appState.companion;
+  return `
+    <div>
+      <p class="page-kicker">Halaman 1 • Pembuka Petualangan</p>
+      <h2 class="display-heading">Welcome to Little Town!</h2>
+      <p class="page-lead">Selamat datang di kota kecil yang penuh keajaiban. Hari ini Mia dan Oliver ingin menjelajahi dunia. Ayo pilih teman perjalananmu dan temukan beragam transportasi!</p>
+    </div>
+
+    <div class="scene-canvas">
+      <svg class="scene-svg" viewBox="0 0 840 340" aria-hidden="true">
+        <rect width="840" height="340" fill="url(#sky-wash)"/>
+        <!-- Sun -->
+        <circle cx="740" cy="64" r="36" fill="var(--story-mustard-soft)" filter="url(#watercolor-soft)"/>
+        <circle cx="740" cy="64" r="24" fill="var(--story-mustard)"/>
+        <!-- Animated Clouds -->
+        <g class="anim-cloud">
+          <ellipse cx="150" cy="66" rx="46" ry="20" fill="var(--story-cloud)"/>
+          <ellipse cx="182" cy="58" rx="34" ry="18" fill="var(--story-cloud)"/>
+        </g>
+        <g class="anim-cloud-slow">
+          <ellipse cx="480" cy="54" rx="52" ry="20" fill="var(--story-cloud)"/>
+          <ellipse cx="516" cy="48" rx="32" ry="16" fill="var(--story-cloud)"/>
+        </g>
+        <!-- Flying Birds -->
+        <g class="anim-bird">
+          <path d="M270 76 Q278 68 286 76 Q294 68 302 76" stroke="var(--on-surface-variant)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M312 92 Q318 85 324 92 Q330 85 336 92" stroke="var(--on-surface-variant)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Watercolor Rolling Hills -->
+        <path d="M0 210 Q180 140 390 195 T840 185 L840 340 L0 340 Z" fill="var(--primary-container)" filter="url(#watercolor-soft)"/>
+        <path d="M0 235 Q240 195 520 235 T840 220 L840 340 L0 340 Z" fill="var(--story-grass)" opacity="0.5"/>
+        <!-- Distant Passing Train on Railway -->
+        <line x1="0" y1="205" x2="840" y2="205" stroke="var(--story-brown)" stroke-width="3" stroke-dasharray="10 6"/>
+        <g class="anim-train-loop">
+          <g transform="translate(0, 152) scale(0.75)">
+            <rect x="0" y="18" width="90" height="32" rx="6" fill="var(--primary)"/>
+            <rect x="96" y="22" width="76" height="28" rx="5" fill="var(--story-mustard)"/>
+            <rect x="10" y="24" width="16" height="12" rx="2" fill="var(--story-sky-soft)"/>
+            <rect x="34" y="24" width="16" height="12" rx="2" fill="var(--story-sky-soft)"/>
+            <rect x="108" y="27" width="16" height="10" rx="2" fill="var(--story-sky-soft)"/>
+            <rect x="134" y="27" width="16" height="10" rx="2" fill="var(--story-sky-soft)"/>
+          </g>
+        </g>
+        <!-- Little Town Houses & Bus Stop -->
+        <rect x="90" y="168" width="66" height="58" rx="4" fill="var(--surface-paper-white)" stroke="var(--outline-variant)" stroke-width="2"/>
+        <polygon points="82,170 123,136 164,170" fill="var(--story-red)"/>
+        <rect x="114" y="196" width="18" height="30" rx="2" fill="var(--story-brown)"/>
+        <rect x="176" y="178" width="58" height="48" rx="4" fill="var(--story-mustard-soft)" stroke="var(--outline-variant)" stroke-width="2"/>
+        <polygon points="170,180 205,150 240,180" fill="var(--story-sky)"/>
+        <!-- Bus Stop -->
+        <rect x="290" y="188" width="4" height="44" fill="var(--on-surface)"/>
+        <circle cx="292" cy="184" r="12" fill="var(--story-red)"/>
+        <text x="292" y="188" text-anchor="middle" font-size="9" font-weight="700" fill="var(--on-primary)">BUS</text>
+        <!-- River at Bottom Right -->
+        <path d="M560 278 Q670 250 840 275 L840 340 L520 340 Z" fill="var(--story-water)" opacity="0.82"/>
+        <!-- Main Town Road & Moving Bus -->
+        <rect x="0" y="232" width="840" height="44" fill="var(--story-road)"/>
+        <line x1="0" y1="254" x2="840" y2="254" stroke="var(--story-road-line)" stroke-width="3" stroke-dasharray="18 14"/>
+        <g class="anim-bus-loop">
+          <g transform="translate(0, 206) scale(0.85)">
+            <rect x="14" y="20" width="92" height="42" rx="10" fill="var(--story-red)"/>
+            <rect x="20" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+            <rect x="42" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+            <rect x="64" y="26" width="18" height="15" rx="3" fill="var(--story-sky-soft)"/>
+            <rect x="14" y="45" width="92" height="5" fill="var(--story-mustard)"/>
+            <circle cx="34" cy="63" r="8" fill="var(--on-surface)"/>
+            <circle cx="84" cy="63" r="8" fill="var(--on-surface)"/>
+          </g>
+        </g>
+        <!-- Mia & Oliver standing happily beside the road -->
+        <g transform="translate(360, 240)">
+          ${renderCharacterSVG(`mia`, 86, true)}
+        </g>
+        <g transform="translate(450, 240)">
+          ${renderCharacterSVG(`oliver`, 86, true)}
+        </g>
+      </svg>
+    </div>
+
+    <blockquote class="story-quote">
+      "Today, Mia and Oliver want to explore the world. But how can they travel? Let's discover different vehicles, visit wonderful places, and learn how people travel!"
+    </blockquote>
+
+    <div class="story-card">
+      <p class="page-kicker">Langkah Pertama • Pilih Teman Petualanganmu</p>
+      <div class="companion-grid">
+        <button type="button" class="companion-card ${comp === `mia` ? `is-selected` : ``}" onclick="selectCompanion('mia')">
+          ${renderCharacterSVG(`mia`, 72, comp === `mia`)}
+          <div>
+            <strong>Mia — Si Penasaran</strong>
+            <div class="vehicle-tile-id">Suka bertanya dan mencatat nama kendaraan baru dalam bahasa Inggris.</div>
+          </div>
+        </button>
+        <button type="button" class="companion-card ${comp === `oliver` ? `is-selected` : ``}" onclick="selectCompanion('oliver')">
+          ${renderCharacterSVG(`oliver`, 72, comp === `oliver`)}
+          <div>
+            <strong>Oliver — Si Petualang</strong>
+            <div class="vehicle-tile-id">Berani mencoba naik bus, kereta, kapal laut, hingga pesawat terbang!</div>
+          </div>
+        </button>
+      </div>
+      <div class="audio-controls-row" style="margin-top: var(--space-md); justify-content: space-between; align-items: center;">
+        <button type="button" class="btn btn-mustard" onclick="speakEnglish('Welcome to Little Town! Today, Mia and Oliver want to explore the world.', 'intro-audio-status')">
+          <i data-lucide="volume-2" aria-hidden="true"></i>
+          Dengar Cerita Pembuka (EN)
+        </button>
+        <button type="button" class="btn btn-primary btn-lg" onclick="goToPage(1)">
+          <span>START ADVENTURE • Mulai Petualangan</span>
+          <i data-lucide="compass" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p id="intro-audio-status" class="vehicle-tile-id" style="margin: var(--space-sm) 0 0;"></p>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 1: INTERACTIVE STORY MAP ----------------
+function renderPage1Map() {
+  const visitedCount = appState.stickers.length;
+  const pct = Math.round((visitedCount / STICKERS.length) * 100);
+
+  const nodesSvg = MAP_DESTINATIONS.map(function(dest) {
+    const unlocked = appState.highestPage >= dest.page || dest.page <= 2;
+    const isCurrent = appState.currentPage === dest.page;
+    return `
+      <g class="map-node-btn" onclick="goToPage(${dest.page})" role="button" tabindex="0">
+        <circle cx="${dest.x}" cy="${dest.y}" r="34" fill="${unlocked ? `var(--surface-paper-white)` : `var(--surface-container-high)`}" stroke="${dest.color}" stroke-width="4"/>
+        <circle cx="${dest.x}" cy="${dest.y - 26}" r="12" fill="${dest.color}"/>
+        <text x="${dest.x}" y="${dest.y - 22}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-primary)">${dest.num}</text>
+        <text x="${dest.x}" y="${dest.y + 4}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">${dest.name}</text>
+        <text x="${dest.x}" y="${dest.y + 18}" text-anchor="middle" font-size="9.5" fill="var(--on-surface-variant)">${dest.sub}</text>
+        ${isCurrent ? `<circle cx="${dest.x}" cy="${dest.y}" r="39" fill="none" stroke="var(--story-mustard)" stroke-width="2" stroke-dasharray="4 4"/>` : ``}
+      </g>
+    `;
+  }).join(``);
+
+  return `
+    <div>
+      <p class="page-kicker">Halaman 2 • Peta Dunia Little Town</p>
+      <h2 class="page-heading">Interactive Story Map — Pilih Tujuanmu!</h2>
+      <p class="page-lead">Ketuk salah satu dari enam destinasi di peta cat air ini untuk langsung berpetualang bersama <strong>${appState.companion === `mia` ? `Mia` : `Oliver`}</strong>.</p>
+    </div>
+
+    <div class="scene-canvas map-container">
+      <svg class="scene-svg" viewBox="0 0 820 360" aria-label="Peta cerita interaktif dengan enam destinasi">
+        <rect width="820" height="360" fill="var(--background)"/>
+        <!-- Watercolor Land & Sea Washes -->
+        <path d="M20 40 Q280 10 540 50 L540 340 L20 340 Z" fill="var(--primary-container)" opacity="0.55" filter="url(#watercolor-soft)"/>
+        <path d="M530 175 Q680 155 805 185 L805 345 L515 345 Z" fill="var(--story-sky-soft)" filter="url(#watercolor-soft)"/>
+        <path d="M555 215 Q685 198 790 220 L790 335 L540 335 Z" fill="var(--story-water)" opacity="0.55"/>
+        <!-- Winding Storybook Trail -->
+        <path d="M145 235 Q230 190 315 170 T485 115 Q590 120 700 95" stroke="var(--story-brown-light)" stroke-width="6" stroke-dasharray="10 8" fill="none"/>
+        <path d="M315 170 Q370 245 430 285 Q540 285 645 270" stroke="var(--story-sky)" stroke-width="5" stroke-dasharray="8 8" fill="none"/>
+        <!-- Small animated vehicles along map -->
+        <g class="anim-bob" transform="translate(215, 165) scale(0.45)">
+          ${renderVehicleSVG(`bus`, 120, 80)}
+        </g>
+        <g class="anim-bob" transform="translate(550, 250) scale(0.45)">
+          ${renderVehicleSVG(`boat`, 120, 80)}
+        </g>
+        <g class="anim-bob" transform="translate(605, 55) scale(0.45)">
+          ${renderVehicleSVG(`airplane`, 120, 80)}
+        </g>
+        <!-- Destination Hotspots -->
+        ${nodesSvg}
+      </svg>
+    </div>
+
+    <div class="two-col-equal">
+      <div class="story-card is-leaf">
+        <strong>Progres Petualangan: ${visitedCount} dari ${STICKERS.length} Stiker (${pct}%)</strong>
+        <p style="margin: 6px 0 10px; font-size: 0.92rem;">Selesaikan setiap bab untuk membuka semua stiker transportasi dan sertifikat akhir!</p>
+        <div style="background: var(--surface-paper-white); border-radius: var(--rounded-full); height: 14px; overflow: hidden;">
+          <div style="width: ${pct}%; height: 100%; background: var(--primary); border-radius: var(--rounded-full);"></div>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <strong>Akses Cepat Bab Lainnya</strong>
+        <div class="audio-controls-row" style="margin-top: var(--space-sm);">
+          <button type="button" class="btn btn-mustard" onclick="goToPage(6)">Chat Adventure</button>
+          <button type="button" class="btn btn-sky" onclick="goToPage(7)">Misi Peta</button>
+          <button type="button" class="btn btn-red" onclick="goToPage(9)">Mini-Games</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 2: CHAPTER 1 VEHICLE DISCOVERY GARDEN ----------------
+function renderPage2Garden() {
+  const cat = appState.vehicleCategory || `all`;
+  const filtered = VEHICLES.filter(function(v) {
+    return cat === `all` ? true : v.cat === cat;
+  });
+  const selected = getVehicle(appState.selectedVehicleId);
+  const catLabel = selected.cat === `land` ? `Darat (Land)` : selected.cat === `water` ? `Air (Water)` : `Udara (Air)`;
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 1 • Taman Penemuan Kendaraan</p>
+      <h2 class="page-heading">The Vehicle Discovery Garden</h2>
+      <p class="page-lead">Ketuk setiap kendaraan untuk mendengar <strong>pelafalan bahasa Inggris</strong> dan <strong>suara mesinnya</strong> secara terpisah! Telah ditemukan: <strong>${appState.discoveredVehicles.length}/18</strong> kendaraan.</p>
+    </div>
+
+    <div class="filter-tabs" role="tablist" aria-label="Kategori kendaraan">
+      <button type="button" class="tab-btn ${cat === `all` ? `is-active` : ``}" onclick="setVehicleCategory('all')">Semua (18)</button>
+      <button type="button" class="tab-btn ${cat === `land` ? `is-active` : ``}" onclick="setVehicleCategory('land')">Darat • Land (11)</button>
+      <button type="button" class="tab-btn ${cat === `water` ? `is-active` : ``}" onclick="setVehicleCategory('water')">Air • Water (4)</button>
+      <button type="button" class="tab-btn ${cat === `air` ? `is-active` : ``}" onclick="setVehicleCategory('air')">Udara • Air (3)</button>
+    </div>
+
+    <div class="split-visual-lead">
+      <!-- Spotlight Card -->
+      <div class="story-card is-leaf">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span class="status-pill">${catLabel}</span>
+          <span class="status-pill is-stars">${selected.phonetic}</span>
+        </div>
+
+        <div class="scene-canvas" style="margin: var(--space-md) 0; padding: var(--space-lg); text-align:center; background: var(--surface-paper-white);">
+          <div class="anim-bob" style="display:inline-block;">
+            ${renderVehicleSVG(selected.id, 210, 140)}
+          </div>
+          <h3 style="font-family:var(--font-headline); font-size:2rem; margin: 6px 0 2px; color:var(--on-surface);">${selected.en}</h3>
+          <p style="margin:0; font-weight:700; color:var(--story-red);">Arti: ${selected.idName}</p>
+        </div>
+
+        <div class="speech-bubble" style="margin-bottom: var(--space-md);">
+          <p class="speech-bubble-en">"${selected.sentence}"</p>
+          <p class="speech-bubble-id">${selected.sentenceId}</p>
+        </div>
+
+        <div class="audio-controls-row">
+          <button type="button" class="btn btn-primary" onclick="speakEnglish('${selected.en}. ${selected.sentence}', 'garden-audio-msg')">
+            <i data-lucide="volume-2" aria-hidden="true"></i>
+            Pelafalan Inggris
+          </button>
+          <button type="button" class="btn btn-red" onclick="triggerVehicleFx('${selected.id}')">
+            <i data-lucide="music" aria-hidden="true"></i>
+            Suara Kendaraan
+          </button>
+        </div>
+        <p id="garden-audio-msg" style="margin: 8px 0 0; font-size:0.88rem; font-weight:700;"></p>
+
+        <div class="story-card is-mustard" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <strong>Fakta Seru (Fun Fact):</strong> ${selected.fact}<br>
+          <span style="font-size:0.88rem;">(${selected.factId})</span>
+        </div>
+      </div>
+
+      <!-- Clickable Vehicle Grid -->
+      <div class="vehicle-grid">
+        ${filtered.map(function(v) {
+          const isSel = v.id === selected.id;
+          const isDisc = appState.discoveredVehicles.indexOf(v.id) !== -1;
+          return `
+            <button type="button" class="vehicle-tile ${isSel ? `is-selected` : ``} ${isDisc ? `is-discovered` : ``}" onclick="selectGardenVehicle('${v.id}')">
+              ${renderVehicleSVG(v.id, 78, 52)}
+              <span class="vehicle-tile-name">${v.en}</span>
+              <span class="vehicle-tile-id">${v.idName}</span>
+            </button>
+          `;
+        }).join(``)}
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 3: CHAPTER 2 HOW DO YOU TRAVEL? ----------------
+function renderPage3HowTravel() {
+  const modes = [
+    { id: `bus`, label: `Bus`, enGo: `I go to school by bus.`, enCome: `I come by bus.`, idTrans: `Aku berangkat ke sekolah naik bus.` },
+    { id: `car`, label: `Car`, enGo: `I go to school by car.`, enCome: `I come by car.`, idTrans: `Aku berangkat ke sekolah naik mobil.` },
+    { id: `bicycle`, label: `Bicycle`, enGo: `I go to school by bicycle.`, enCome: `I come by bicycle.`, idTrans: `Aku berangkat ke sekolah naik sepeda.` },
+    { id: `motorcycle`, label: `Motorcycle`, enGo: `I go to school by motorcycle.`, enCome: `I come by motorcycle.`, idTrans: `Aku berangkat ke sekolah naik sepeda motor.` },
+    { id: `walk`, label: `Walk`, enGo: `I walk to school.`, enCome: `I walk.`, idTrans: `Aku berjalan kaki ke sekolah.` }
+  ];
+  const active = modes.find(function(m) { return m.id === appState.chapter2Mode; }) || modes[0];
+  const who = appState.companion;
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 2 • Ekspresi Utama: Go vs Come</p>
+      <h2 class="page-heading">How Do You Travel to School?</h2>
+      <p class="page-lead">Pilih kendaraan di depan rumah untuk mengantar <strong>${who === `mia` ? `Mia` : `Oliver`}</strong> ke sekolah, lalu perhatikan perbedaan kalimat <strong>go</strong> dan <strong>come</strong>!</p>
+    </div>
+
+    <div class="scene-canvas">
+      <svg class="scene-svg" viewBox="0 0 820 265" aria-hidden="true">
+        <rect width="820" height="265" fill="url(#sky-wash)"/>
+        <path d="M0 175 Q220 130 460 170 T820 155 L820 265 L0 265 Z" fill="var(--primary-container)"/>
+        <!-- House (Left) -->
+        <rect x="44" y="102" width="110" height="84" rx="6" fill="var(--story-mustard-soft)" stroke="var(--outline)" stroke-width="2"/>
+        <polygon points="34,104 99,56 164,104" fill="var(--story-red)"/>
+        <rect x="86" y="140" width="26" height="46" rx="3" fill="var(--story-brown)"/>
+        <text x="99" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">HOME (Rumah)</text>
+        <!-- School (Right) -->
+        <rect x="646" y="88" width="134" height="98" rx="6" fill="var(--surface-paper-white)" stroke="var(--outline)" stroke-width="2"/>
+        <polygon points="636,90 713,44 790,90" fill="var(--primary)"/>
+        <rect x="698" y="136" width="30" height="50" rx="3" fill="var(--story-brown)"/>
+        <text x="713" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">SCHOOL (Sekolah)</text>
+        <!-- Road -->
+        <rect x="0" y="186" width="820" height="52" fill="var(--story-road)"/>
+        <line x1="0" y1="212" x2="820" y2="212" stroke="var(--story-road-line)" stroke-width="3" stroke-dasharray="16 12"/>
+        <!-- Arrow from Home to School -->
+        <path d="M180 112 Q410 72 620 112" stroke="var(--story-red)" stroke-width="3" stroke-dasharray="7 6" fill="none"/>
+        <polygon points="620,112 608,105 610,118" fill="var(--story-red)"/>
+        <text x="400" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="var(--story-red)">go to school (berangkat menuju sekolah)</text>
+        <!-- Character + Selected Vehicle traveling -->
+        <g transform="translate(340, 148)">
+          ${active.id === `walk`
+            ? renderCharacterSVG(who, 72, true)
+            : `<g transform="translate(0, 6)">${renderVehicleSVG(active.id, 130, 86)}</g>
+               <g transform="translate(-45, 14)">${renderCharacterSVG(who, 56, true)}</g>`
+          }
+        </g>
+      </svg>
+    </div>
+
+    <div class="audio-controls-row">
+      ${modes.map(function(m) {
+        return `<button type="button" class="btn ${active.id === m.id ? `btn-primary` : `btn-secondary`}" onclick="chooseChapter2Mode('${m.id}')">${m.label}</button>`;
+      }).join(``)}
+    </div>
+
+    <div class="two-col-equal">
+      <div class="story-card is-leaf">
+        <p class="page-kicker">Dari Rumah → Menuju Sekolah</p>
+        <p class="speech-bubble-en">"How do you go to school?"</p>
+        <p class="speech-bubble-en" style="color:var(--on-surface);">"${active.enGo}"</p>
+        <p class="speech-bubble-id">${active.idTrans}</p>
+        <button type="button" class="btn btn-primary" style="margin-top:10px;" onclick="speakEnglish('How do you go to school? ${active.enGo}', 'ch2-audio-msg')">
+          <i data-lucide="volume-2" aria-hidden="true"></i> Dengar Dialog (Go)
+        </button>
+      </div>
+
+      <div class="story-card is-sky">
+        <p class="page-kicker">Sudah Tiba di Sekolah</p>
+        <p class="speech-bubble-en" style="color:var(--on-story-sky-soft);">"How do you come to school?"</p>
+        <p class="speech-bubble-en" style="color:var(--on-surface);">"${active.enCome}"</p>
+        <p class="speech-bubble-id">Dipakai saat teman/guru menanyakan caramu datang ketika sudah berada di sekolah.</p>
+        <button type="button" class="btn btn-sky" style="margin-top:10px;" onclick="speakEnglish('How do you come to school? ${active.enCome}', 'ch2-audio-msg')">
+          <i data-lucide="volume-2" aria-hidden="true"></i> Dengar Dialog (Come)
+        </button>
+      </div>
+    </div>
+    <p id="ch2-audio-msg" style="margin:0; font-weight:700; font-size:0.9rem;"></p>
+  `;
+}
+
+// ---------------- PAGE 4: CHAPTER 3A & 3B BUSY ROAD & RAILWAY ----------------
+function renderPage4RoadRail() {
+  const streetVehicles = [
+    { id: `bus`, x: 40, y: 122 },
+    { id: `car`, x: 200, y: 132 },
+    { id: `taxi`, x: 355, y: 132 },
+    { id: `motorcycle`, x: 510, y: 134 },
+    { id: `bicycle`, x: 645, y: 134 },
+    { id: `truck`, x: 420, y: 54 }
+  ];
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 3A & 3B • Dunia Transportasi Darat</p>
+      <h2 class="page-heading">The Busy Road & The Railway Station</h2>
+      <p class="page-lead">Ketuk setiap kendaraan di jalan raya dan stasiun kereta! Coba temukan <strong>semua 6 kendaraan darat</strong> di gambar dan tebak suara misteriusnya.</p>
+    </div>
+
+    <div class="scene-canvas">
+      <svg class="scene-svg" viewBox="0 0 820 280" aria-label="Adegan Jalan Raya dan Stasiun Kereta">
+        <rect width="820" height="280" fill="url(#sky-wash)"/>
+        <!-- Railway Track Top -->
+        <rect x="0" y="34" width="820" height="58" fill="var(--primary-container)" opacity="0.65"/>
+        <line x1="0" y1="86" x2="820" y2="86" stroke="var(--story-brown)" stroke-width="5"/>
+        <g style="cursor:pointer;" onclick="tapRoadVehicle('train')">
+          <g transform="translate(80, 12)">
+            ${renderVehicleSVG(`train`, 135, 84)}
+          </g>
+          <rect x="225" y="20" width="150" height="28" rx="14" fill="var(--surface-paper-white)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="300" y="38" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--primary)">Tap Train (Kereta)</text>
+        </g>
+        <!-- Busy Road -->
+        <rect x="0" y="114" width="820" height="148" fill="var(--story-road)"/>
+        <line x1="0" y1="188" x2="820" y2="188" stroke="var(--story-road-line)" stroke-width="4" stroke-dasharray="22 14"/>
+        <!-- Clickable Street Vehicles -->
+        ${streetVehicles.map(function(sv) {
+          const found = appState.roadFoundIds.indexOf(sv.id) !== -1;
+          return `
+            <g style="cursor:pointer;" onclick="tapRoadVehicle('${sv.id}')">
+              <g transform="translate(${sv.x}, ${sv.y})">
+                ${renderVehicleSVG(sv.id, 118, 78)}
+              </g>
+              ${found ? `<circle cx="${sv.x + 96}" cy="${sv.y + 12}" r="11" fill="var(--primary)"/><text x="${sv.x + 96}" y="${sv.y + 16}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-primary)">✓</text>` : ``}
+            </g>
+          `;
+        }).join(``)}
+      </svg>
+    </div>
+
+    <div class="two-col-equal">
+      <div class="story-card is-leaf">
+        <strong>Misi 1: Hitung & Temukan Kendaraan (${appState.roadFoundIds.length}/6)</strong>
+        <p style="margin:6px 0;">Ketuk kendaraan di jalan raya untuk mendengar namanya! Sudah ditemukan: <strong>${appState.roadFoundIds.join(`, `) || `belum ada`}</strong>.</p>
+        <p id="road-tap-msg" style="margin:6px 0 0; font-weight:700;"></p>
+      </div>
+
+      <div class="story-card is-mustard">
+        <strong>Misi 2: Tebak Suara di Jalan Raya!</strong>
+        <p style="margin:6px 0;">Putar suara kendaraan ini, lalu pilih jawaban yang benar:</p>
+        <div class="audio-controls-row">
+          <button type="button" class="btn btn-red" onclick="playVehicleSound('bicycle')">
+            <i data-lucide="music" aria-hidden="true"></i> Putar Suara Misteri
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="checkRoadQuiz('truck')">Truck</button>
+          <button type="button" class="btn btn-secondary" onclick="checkRoadQuiz('bicycle')">Bicycle</button>
+          <button type="button" class="btn btn-secondary" onclick="checkRoadQuiz('bus')">Bus</button>
+        </div>
+        <p id="road-quiz-msg" style="margin:8px 0 0; font-weight:700;">
+          ${appState.roadQuizSolved ? `✓ Benar! Itu suara bel Bicycle (sepeda)!` : ``}
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 5: CHAPTER 3C & 3D HARBOR & AIRPORT ----------------
+function renderPage5HarborAir() {
+  const sailX = appState.harborSailed ? 490 : 85;
+  const planeY = appState.airportLaunched ? 18 : 112;
+  const planeX = appState.airportLaunched ? 550 : 95;
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 3C & 3D • Pelabuhan Laut & Bandara Ajaib</p>
+      <h2 class="page-heading">The Harbor Adventure & The Magical Airport</h2>
+      <p class="page-lead">Jelajahi kendaraan <strong>air (water)</strong> di pelabuhan dan terbangkan kendaraan <strong>udara (air)</strong> di bandara!</p>
+    </div>
+
+    <div class="two-col-equal">
+      <!-- HARBOR -->
+      <div class="story-card is-sky">
+        <p class="page-kicker">Pelabuhan • Water Transportation</p>
+        <div class="scene-canvas" style="margin: 8px 0 12px;">
+          <svg class="scene-svg" viewBox="0 0 420 220" aria-label="Adegan Pelabuhan Laut">
+            <rect width="420" height="120" fill="url(#sky-wash)"/>
+            <rect x="0" y="115" width="420" height="105" fill="url(#sea-wash)"/>
+            <!-- Lighthouse Island -->
+            <path d="M315 120 Q360 88 415 120 Z" fill="var(--primary-container)"/>
+            <rect x="358" y="60" width="16" height="44" fill="var(--story-red)"/>
+            <circle cx="366" cy="56" r="7" fill="var(--story-mustard)"/>
+            <!-- Selected Sailing Vehicle -->
+            <g transform="translate(${sailX * 0.55}, 115)" style="transition: transform 0.7s ease-out; cursor:pointer;" onclick="speakEnglish(getVehicle('${appState.harborBoat}').en, 'harbor-msg'); playVehicleSound('${appState.harborBoat}');">
+              ${renderVehicleSVG(appState.harborBoat, 120, 80)}
+            </g>
+          </svg>
+        </div>
+        <div class="audio-controls-row" style="margin-bottom:8px;">
+          ${[`boat`, `ship`, `ferry`, `submarine`].map(function(wid) {
+            return `<button type="button" class="btn ${appState.harborBoat === wid ? `btn-sky` : `btn-secondary`}" onclick="selectHarborBoat('${wid}')">${getVehicle(wid).en}</button>`;
+          }).join(``)}
+        </div>
+        <button type="button" class="btn btn-primary" onclick="sailHarborBoat()">
+          <i data-lucide="waves" aria-hidden="true"></i> Layarkan ke Pulau!
+        </button>
+        <p id="harbor-msg" style="margin:8px 0 0; font-weight:700; font-size:0.9rem;">
+          ${appState.harborSailed ? `⛵ "${getVehicle(appState.harborBoat).en} travels on water!"` : `Pilih kendaraan air lalu klik Layarkan!`}
+        </p>
+      </div>
+
+      <!-- AIRPORT -->
+      <div class="story-card is-mustard">
+        <p class="page-kicker">Bandara Ajaib • Air Transportation</p>
+        <div class="scene-canvas" style="margin: 8px 0 12px;">
+          <svg class="scene-svg" viewBox="0 0 420 220" aria-label="Adegan Bandara Ajaib">
+            <rect width="420" height="168" fill="url(#sky-wash)"/>
+            <ellipse cx="90" cy="48" rx="34" ry="14" fill="var(--story-cloud)"/>
+            <ellipse cx="310" cy="42" rx="40" ry="16" fill="var(--story-cloud)"/>
+            <!-- Runway -->
+            <rect x="0" y="168" width="420" height="52" fill="var(--story-road)"/>
+            <line x1="20" y1="194" x2="400" y2="194" stroke="var(--story-road-line)" stroke-width="3" stroke-dasharray="16 10"/>
+            <!-- Helicopter & Hot Air Balloon -->
+            <g transform="translate(20, 48) scale(0.68)" style="cursor:pointer;" onclick="speakEnglish('Hot air balloon', 'airport-msg'); playVehicleSound('hotairballoon');">
+              ${renderVehicleSVG(`hotairballoon`, 120, 80)}
+            </g>
+            <g transform="translate(290, 56) scale(0.7)" style="cursor:pointer;" onclick="speakEnglish('Helicopter', 'airport-msg'); playVehicleSound('helicopter');">
+              ${renderVehicleSVG(`helicopter`, 120, 80)}
+            </g>
+            <!-- Airplane Taking Off -->
+            <g transform="translate(${planeX * 0.45}, ${planeY})" style="transition: transform 0.7s ease-out; cursor:pointer;" onclick="speakEnglish('Airplane', 'airport-msg'); playVehicleSound('airplane');">
+              ${renderVehicleSVG(`airplane`, 120, 80)}
+            </g>
+          </svg>
+        </div>
+        <div class="audio-controls-row">
+          <button type="button" class="btn btn-red" onclick="launchAirplane()">
+            <i data-lucide="plane-takeoff" aria-hidden="true"></i>
+            ${appState.airportLaunched ? `Pesawat Terbang! (Ulangi)` : `Terbangkan Pesawat! (Take Off)`}
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="speakEnglish('The airplane flies in the sky!', 'airport-msg')">
+            <i data-lucide="volume-2" aria-hidden="true"></i> Dengar Kalimat
+          </button>
+        </div>
+        <p id="airport-msg" style="margin:8px 0 0; font-weight:700; font-size:0.9rem;">
+          ${appState.airportLaunched ? `✈️ "The airplane flies high in the sky!"` : `Ketuk pesawat, helikopter, atau balon udara untuk suaranya!`}
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 6: CHAPTER 4 CHAT ADVENTURE ----------------
+function renderPage6Chat() {
+  const dialogue = [
+    { sender: `Mia`, side: `left`, text: `Hi, Oliver! How do you go to school?`, idText: `Hai, Oliver! Bagaimana kamu berangkat ke sekolah?` },
+    { sender: `Oliver`, side: `right`, text: `I go to school by bicycle.`, idText: `Aku berangkat ke sekolah naik sepeda.` },
+    { sender: `Mia`, side: `left`, text: `That's cool! Is your school far?`, idText: `Keren! Apakah sekolahmu jauh?` },
+    { sender: `Oliver`, side: `right`, text: `No, it isn't. It's near my house.`, idText: `Tidak, sekolahku dekat dengan rumahku.` },
+    { sender: `Mia`, side: `left`, text: `How about your father?`, idText: `Bagaimana dengan ayahmu?` },
+    { sender: `Oliver`, side: `right`, text: `He goes to work by car.`, idText: `Beliau berangkat kerja naik mobil.` }
+  ];
+
+  const chatQuiz = [
+    {
+      prompt: `Mia bertanya: "How do you go to school?" — Balasan mana yang tepat?`,
+      options: [
+        { label: `I go to school by bus.`, ok: true },
+        { label: `The school is red.`, ok: false },
+        { label: `Yes, I have two apples.`, ok: false }
+      ]
+    },
+    {
+      prompt: `Oliver bertanya: "How about your mother?" — Balasan mana yang tepat?`,
+      options: [
+        { label: `She goes to work by motorcycle.`, ok: true },
+        { label: `I am ten years old.`, ok: false },
+        { label: `Good night!`, ok: false }
+      ]
+    }
+  ];
+
+  const qIdx = appState.chatQuizIndex;
+  const currentQ = chatQuiz[qIdx];
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 4 • Petualangan Obrolan</p>
+      <h2 class="page-heading">Transportation Chat Adventure</h2>
+      <p class="page-lead">Ketuk setiap balon pesan untuk mendengarkan percakapan bahasa Inggris, lengkapi balasan yang hilang, lalu buat obrolanmu sendiri!</p>
+    </div>
+
+    <div class="two-col-equal">
+      <!-- Messenger Interface -->
+      <div class="chat-phone">
+        <div class="chat-topbar">
+          <span>💬 Little Town Messenger</span>
+          <span style="font-size:0.8rem;">Ketuk pesan untuk mendengar</span>
+        </div>
+        <div class="chat-messages">
+          ${dialogue.map(function(d, idx) {
+            return `
+              <div class="chat-row ${d.side === `right` ? `is-right` : ``}">
+                <button type="button" class="chat-bubble-btn" onclick="speakEnglish(CHAT_LINES[${idx}], 'chat-audio-msg')">
+                  <span class="chat-sender">${d.sender}</span>
+                  <strong>${d.text}</strong>
+                  <div class="vehicle-tile-id">${d.idText}</div>
+                </button>
+              </div>
+            `;
+          }).join(``)}
+        </div>
+      </div>
+
+      <!-- Interactive Chat Activities -->
+      <div style="display:grid; gap: var(--space-md);">
+        <div class="story-card is-mustard">
+          <strong>Lengkapi Pesan (${qIdx + 1}/2)</strong>
+          <p style="margin:6px 0 10px;">${currentQ.prompt}</p>
+          <div style="display:grid; gap:8px;">
+            ${currentQ.options.map(function(opt, oi) {
+              return `<button type="button" class="btn btn-secondary" style="justify-content:flex-start;" onclick="answerChatQuiz(${qIdx}, ${oi}, ${opt.ok})">${opt.label}</button>`;
+            }).join(``)}
+          </div>
+          <p id="chat-quiz-msg" style="margin:8px 0 0; font-weight:700;">
+            ${appState.chatQuizSolved[qIdx] ? `✓ Hebat! Balasanmu cocok sekali!` : ``}
+          </p>
+        </div>
+
+        <div class="story-card is-leaf">
+          <strong>Buat Percakapanmu Sendiri!</strong>
+          <div class="input-row" style="margin-top:8px;">
+            <div class="field-group">
+              <label class="field-label" for="sel-chat-place">Tujuan (Destination)</label>
+              <select id="sel-chat-place" class="text-input" onchange="updateCustomChat('place', this.value)">
+                <option value="school" ${appState.customChatPlace === `school` ? `selected` : ``}>school (sekolah)</option>
+                <option value="the beach" ${appState.customChatPlace === `the beach` ? `selected` : ``}>the beach (pantai)</option>
+                <option value="the airport" ${appState.customChatPlace === `the airport` ? `selected` : ``}>the airport (bandara)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sel-chat-veh">Kendaraan (Vehicle)</label>
+              <select id="sel-chat-veh" class="text-input" onchange="updateCustomChat('vehicle', this.value)">
+                <option value="bus" ${appState.customChatVehicle === `bus` ? `selected` : ``}>bus</option>
+                <option value="train" ${appState.customChatVehicle === `train` ? `selected` : ``}>train</option>
+                <option value="taxi" ${appState.customChatVehicle === `taxi` ? `selected` : ``}>taxi</option>
+                <option value="bicycle" ${appState.customChatVehicle === `bicycle` ? `selected` : ``}>bicycle</option>
+              </select>
+            </div>
+          </div>
+          <div class="speech-bubble" style="margin-top:10px;">
+            <p class="speech-bubble-en">"How do you go to ${appState.customChatPlace}?" — "I go there by ${appState.customChatVehicle}!"</p>
+          </div>
+          <button type="button" class="btn btn-primary" style="margin-top:8px;" onclick="speakEnglish('How do you go to ${appState.customChatPlace}? I go there by ${appState.customChatVehicle}!', 'chat-audio-msg')">
+            <i data-lucide="volume-2" aria-hidden="true"></i> Putar Obrolan Buatanmu
+          </button>
+          <p id="chat-audio-msg" style="margin:6px 0 0; font-weight:700; font-size:0.88rem;"></p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+const CHAT_LINES = [
+  `Hi, Oliver! How do you go to school?`,
+  `I go to school by bicycle.`,
+  `That's cool! Is your school far?`,
+  `No, it isn't. It's near my house.`,
+  `How about your father?`,
+  `He goes to work by car.`
+];
+
+// ---------------- PAGE 7: CHAPTER 5 PLAN A JOURNEY ----------------
+function renderPage7Missions() {
+  const missions = [
+    {
+      num: 1,
+      title: `Mission 1: "Let's go to the beach!"`,
+      desc: `Mia dan Oliver ingin pergi ke pantai yang jauh di seberang pulau. Kendaraan mana yang cocok?`,
+      choices: [
+        { id: `bus`, label: `By bus`, ok: true, msg: `Let's go by bus along the coastal road!` },
+        { id: `boat`, label: `By boat`, ok: true, msg: `We can travel by boat across the water!` },
+        { id: `airplane`, label: `By airplane`, ok: true, msg: `I want to go by airplane! It is super fast!` }
+      ]
+    },
+    {
+      num: 2,
+      title: `Mission 2: "Let's visit another city!"`,
+      desc: `Kota tujuan berada di provinsi lain. Pilih kendaraan jarak jauh yang paling cocok:`,
+      choices: [
+        { id: `train`, label: `By train`, ok: true, msg: `We can travel by train! Choo-choo!` },
+        { id: `airplane`, label: `By airplane`, ok: true, msg: `The airplane is faster than the bus!` },
+        { id: `scooter`, label: `By scooter`, ok: false, msg: `Hmm, skuter hanya untuk jarak dekat di taman!` }
+      ]
+    },
+    {
+      num: 3,
+      title: `Mission 3: "Let's cross the river!"`,
+      desc: `Di depan ada sungai lebar tanpa jembatan. Kendaraan air apa yang harus dipilih?`,
+      choices: [
+        { id: `ferry`, label: `By ferry`, ok: true, msg: `The ferry is on the water and carries everyone safely!` },
+        { id: `boat`, label: `By boat`, ok: true, msg: `The boat sails smoothly across the river!` },
+        { id: `car`, label: `By car`, ok: false, msg: `Mobil berjalan di jalan raya, bukan di atas air!` }
+      ]
+    }
+  ];
+
+  const solvedCount = appState.missionsSolved.filter(Boolean).length;
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 5 • Merencanakan Perjalanan</p>
+      <h2 class="page-heading">Let's Plan a Journey! (${solvedCount}/3 Misi)</h2>
+      <p class="page-lead">Bantu Mia dan Oliver memilih kendaraan yang tepat untuk setiap tujuan perjalanan dan pelajari ekspresi rencananya!</p>
+    </div>
+
+    <div style="display:grid; gap: var(--space-md);">
+      ${missions.map(function(m, idx) {
+        const done = appState.missionsSolved[idx];
+        return `
+          <div class="story-card ${done ? `is-leaf` : ``}">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <strong style="font-family:var(--font-headline); font-size:1.2rem;">${m.title}</strong>
+              <span class="status-pill">${done ? `✓ Misi Selesai` : `Menunggu Pilihan`}</span>
+            </div>
+            <p style="margin:6px 0 12px;">${m.desc}</p>
+            <div class="audio-controls-row">
+              ${m.choices.map(function(c) {
+                return `<button type="button" class="btn btn-secondary" onclick="solveMission(${idx}, '${c.id}', ${c.ok}, \`${c.msg}\`)">${c.label}</button>`;
+              }).join(``)}
+            </div>
+            <p id="mission-msg-${idx}" style="margin:8px 0 0; font-weight:700;"></p>
+          </div>
+        `;
+      }).join(``)}
+    </div>
+  `;
+}
+
+// ---------------- PAGE 8: CHAPTER 6 HOW DO YOU COME TO SCHOOL? ----------------
+function renderPage8SchoolGate() {
+  const students = [
+    { id: `anna`, name: `Anna`, vehicle: `bus`, sentence: `I come to school by bus.`, idText: `Anna datang ke sekolah naik bus.` },
+    { id: `ben`, name: `Ben`, vehicle: `bicycle`, sentence: `I come to school by bicycle.`, idText: `Ben datang ke sekolah naik sepeda.` },
+    { id: `sarah`, name: `Sarah`, vehicle: `car`, sentence: `I come to school by car.`, idText: `Sarah datang ke sekolah naik mobil.` },
+    { id: `tom`, name: `Tom`, vehicle: `walk`, sentence: `I walk to school.`, idText: `Tom berjalan kaki ke sekolah.` }
+  ];
+
+  const quickModes = [
+    `I come by car.`,
+    `I come by bus.`,
+    `I come by motorcycle.`,
+    `I come by bicycle.`,
+    `I walk.`
+  ];
+
+  return `
+    <div>
+      <p class="page-kicker">Bab 6 • Praktik Ekspresi Utama di Gerbang Sekolah</p>
+      <h2 class="page-heading">How Do You Come to School?</h2>
+      <p class="page-lead">Ketuk setiap murid di gerbang sekolah untuk mendengar bagaimana mereka datang, lalu jawab pertanyaan untuk dirimu sendiri!</p>
+    </div>
+
+    <div class="two-col-equal">
+      <!-- 4 Students Arriving -->
+      <div style="display:grid; gap:var(--space-sm);">
+        ${students.map(function(st) {
+          const clicked = appState.schoolClicked.indexOf(st.id) !== -1;
+          return `
+            <button type="button" class="companion-card ${clicked ? `is-selected` : ``}" onclick="clickSchoolStudent('${st.id}', \`Hi! I'm ${st.name}. ${st.sentence}\`, '${st.vehicle}')">
+              <div style="flex-shrink:0;">
+                ${st.vehicle === `walk` ? renderCharacterSVG(`oliver`, 64, true) : renderVehicleSVG(st.vehicle, 88, 58)}
+              </div>
+              <div>
+                <strong>${st.name}: "${st.sentence}"</strong>
+                <div class="vehicle-tile-id">${st.idText}</div>
+              </div>
+            </button>
+          `;
+        }).join(``)}
+        <p id="school-student-msg" style="margin:4px 0 0; font-weight:700;"></p>
+      </div>
+
+      <!-- Personal Communication Task -->
+      <div class="story-card is-mustard" style="display:grid; gap:var(--space-md); align-content:start;">
+        <div>
+          <p class="page-kicker">Giliranmu Menjawab!</p>
+          <h3 style="font-family:var(--font-headline); margin:0 0 6px;">"How do you come to school?"</h3>
+          <p style="margin:0; font-size:0.92rem;">Pilih salah satu jawaban cepat atau ketik kalimat bahasa Inggrismu sendiri:</p>
+        </div>
+
+        <div class="audio-controls-row">
+          ${quickModes.map(function(qm) {
+            const act = appState.personalSchoolMode === qm;
+            return `<button type="button" class="btn ${act ? `btn-primary` : `btn-secondary`}" onclick="pickPersonalSchool(\`${qm}\`)">${qm}</button>`;
+          }).join(``)}
+        </div>
+
+        <div class="input-row">
+          <div class="field-group">
+            <label class="field-label" for="input-personal-school">Tuliskan jawaban bahasa Inggrismu sendiri:</label>
+            <input type="text" id="input-personal-school" class="text-input" value="${escapeHtml(appState.personalSchoolText)}" placeholder="Contoh: I come to school by bicycle.">
+          </div>
+          <button type="button" class="btn btn-primary" onclick="savePersonalSchool()">Simpan & Ucapkan</button>
+        </div>
+
+        ${appState.personalSchoolText ? `
+          <div class="speech-bubble">
+            <p class="speech-bubble-en">"${escapeHtml(appState.personalSchoolText)}"</p>
+            <p class="speech-bubble-id">Jawaban pribadimu sudah tersimpan! 🌟</p>
+          </div>
+        ` : ``}
+        <p id="personal-school-msg" style="margin:0; font-weight:700;"></p>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- PAGE 9: MINI GAMES FUNFAIR ----------------
+function renderPage9Games() {
+  const g = appState.activeGame;
+  const tabs = [
+    { id: `hunter`, label: `1. Vehicle Hunter` },
+    { id: `sound`, label: `2. Guess the Sound` },
+    { id: `classify`, label: `3. Where Does It Go?` },
+    { id: `sentence`, label: `4. Build a Sentence` },
+    { id: `odd`, label: `5. Odd One Out` },
+    { id: `memory`, label: `6. Memory Cards` },
+    { id: `listen`, label: `7. Listen & Choose` }
+  ];
+
+  let board = ``;
+  if (g === `hunter`) {
+    const pool = [`car`, `bus`, `bicycle`, `airplane`, `boat`, `train`];
+    const targetV = getVehicle(gameHunterTarget);
+    board = `
+      <div class="story-card is-leaf">
+        <h3>Game 1: Vehicle Hunter — Temukan Kendaraannya!</h3>
+        <p style="font-size:1.1rem;"><strong>Perintah: "Find the ${targetV.en} (${targetV.idName})!"</strong></p>
+        <div class="vehicle-grid" style="margin-top:12px;">
+          ${pool.map(function(id) {
+            return `<button type="button" class="vehicle-tile" onclick="checkHunter('${id}')">${renderVehicleSVG(id, 90, 60)}<span class="vehicle-tile-id">?</span></button>`;
+          }).join(``)}
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `sound`) {
+    const opts = [`train`, `bicycle`, `submarine`, `helicopter`];
+    board = `
+      <div class="story-card is-sky">
+        <h3>Game 2: Guess the Sound — Tebak Suara Kendaraan!</h3>
+        <button type="button" class="btn btn-red" onclick="playVehicleSound('${gameSoundTarget}')">
+          <i data-lucide="music" aria-hidden="true"></i> Putar Suara Misterius
+        </button>
+        <div class="vehicle-grid" style="margin-top:12px;">
+          ${opts.map(function(id) {
+            const v = getVehicle(id);
+            return `<button type="button" class="vehicle-tile" onclick="checkSoundGame('${id}')">${renderVehicleSVG(id, 90, 60)}<span class="vehicle-tile-name">${v.en}</span></button>`;
+          }).join(``)}
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `classify`) {
+    const v = getVehicle(gameClassifyQueue[gameClassifyIdx % gameClassifyQueue.length]);
+    board = `
+      <div class="story-card is-mustard">
+        <h3>Game 3: Where Does It Go? (${(gameClassifyIdx % gameClassifyQueue.length) + 1}/${gameClassifyQueue.length})</h3>
+        <div style="text-align:center; padding:12px; background:var(--surface-paper-white); border-radius:var(--rounded); margin-bottom:12px;">
+          ${renderVehicleSVG(v.id, 140, 92)}
+          <div style="font-weight:700; font-size:1.2rem;">${v.en} (${v.idName})</div>
+        </div>
+        <div class="audio-controls-row">
+          <button type="button" class="btn btn-primary" onclick="checkClassify('land')">🛣️ Road (Darat)</button>
+          <button type="button" class="btn btn-sky" onclick="checkClassify('water')">🌊 Water (Air)</button>
+          <button type="button" class="btn btn-red" onclick="checkClassify('air')">☁️ Sky (Udara)</button>
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `sentence`) {
+    const puzzles = [
+      { target: [`I`, `go`, `to school`, `by`, `bus.`], scrambled: [`by`, `bus.`, `I`, `to school`, `go`] },
+      { target: [`How`, `do`, `you`, `come`, `to school?`], scrambled: [`you`, `come`, `How`, `to school?`, `do`] }
+    ];
+    const puz = puzzles[gameSentenceIdx % puzzles.length];
+    board = `
+      <div class="story-card is-leaf">
+        <h3>Game 4: Build a Sentence — Susun Kalimat Bahasa Inggris!</h3>
+        <p>Ketuk kata-kata di bawah secara berurutan:</p>
+        <div class="speech-bubble" style="min-height:58px; margin-bottom:12px;">
+          <strong>${gameSentenceBuilt.map(function(i) { return puz.scrambled[i]; }).join(` `) || `... (pilih kata)`}</strong>
+        </div>
+        <div class="word-bank">
+          ${puz.scrambled.map(function(w, idx) {
+            const used = gameSentenceBuilt.indexOf(idx) !== -1;
+            return `<button type="button" class="word-chip ${used ? `is-used` : ``}" ${used ? `disabled` : ``} onclick="pickSentenceWord(${idx})">${w}</button>`;
+          }).join(``)}
+        </div>
+        <div class="audio-controls-row" style="margin-top:12px;">
+          <button type="button" class="btn btn-secondary" onclick="resetSentenceGame()">Ulangi Susunan</button>
+          <button type="button" class="btn btn-primary" onclick="checkSentenceGame()">Periksa Kalimat</button>
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `odd`) {
+    const sets = [
+      { items: [`car`, `bus`, `submarine`, `bicycle`], odd: `submarine`, why: `Submarine bergerak di bawah air, sedangkan Car, Bus, dan Bicycle di darat!` },
+      { items: [`airplane`, `helicopter`, `hotairballoon`, `ferry`], odd: `ferry`, why: `Ferry berlayar di atas air, sedangkan tiga lainnya terbang di udara!` }
+    ];
+    const cur = sets[gameOddIdx % sets.length];
+    board = `
+      <div class="story-card is-red">
+        <h3>Game 5: Which One Is Different? — Mana yang Berbeda?</h3>
+        <p>Ketuk satu kendaraan yang tempat berjalannya berbeda dari ketiga lainnya:</p>
+        <div class="vehicle-grid">
+          ${cur.items.map(function(id) {
+            const v = getVehicle(id);
+            return `<button type="button" class="vehicle-tile" onclick="checkOddGame('${id}')">${renderVehicleSVG(id, 90, 60)}<span class="vehicle-tile-name">${v.en}</span></button>`;
+          }).join(``)}
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `memory`) {
+    if (gameMemoryCards.length === 0) initMemoryGame();
+    board = `
+      <div class="story-card is-sky">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <h3 style="margin:0;">Game 6: Transportation Memory</h3>
+          <button type="button" class="btn btn-secondary" onclick="initMemoryGame(); renderCurrentPage();">Acak Ulang</button>
+        </div>
+        <div class="memory-grid">
+          ${gameMemoryCards.map(function(vid, idx) {
+            const flipped = gameMemoryFlipped.indexOf(idx) !== -1;
+            const matched = gameMemoryMatched.indexOf(idx) !== -1;
+            const v = getVehicle(vid);
+            return `
+              <button type="button" class="memory-card ${flipped ? `is-flipped` : ``} ${matched ? `is-matched` : ``}" onclick="flipMemoryCard(${idx})">
+                ${flipped || matched ? `${renderVehicleSVG(vid, 68, 44)}<span>${v.en}</span>` : `<span>?</span>`}
+              </button>
+            `;
+          }).join(``)}
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  } else if (g === `listen`) {
+    const opts = [`airplane`, `fire truck`, `ferry`, `scooter`];
+    const optIds = [`airplane`, `firetruck`, `ferry`, `scooter`];
+    const targetV = getVehicle(gameListenTarget);
+    board = `
+      <div class="story-card is-mustard">
+        <h3>Game 7: Listen and Choose — Dengar & Pilih Gambar!</h3>
+        <button type="button" class="btn btn-primary" onclick="speakEnglish('${targetV.en}', 'game-msg')">
+          <i data-lucide="volume-2" aria-hidden="true"></i> Dengarkan Kata Inggris
+        </button>
+        <div class="vehicle-grid" style="margin-top:12px;">
+          ${optIds.map(function(id) {
+            return `<button type="button" class="vehicle-tile" onclick="checkListenGame('${id}')">${renderVehicleSVG(id, 90, 60)}<span class="vehicle-tile-id">Pilih ini</span></button>`;
+          }).join(``)}
+        </div>
+        <p id="game-msg" style="margin:10px 0 0; font-weight:700;"></p>
+      </div>
+    `;
+  }
+
+  return `
+    <div>
+      <p class="page-kicker">Halaman 10 • Taman Mini-Game Interaktif</p>
+      <h2 class="page-heading">Transportation Funfair (${appState.gamesWon.length}/7 Game Dimenangkan)</h2>
+      <p class="page-lead">Pilih satu permainan di bawah untuk melatih kosa kata, suara kendaraan, dan kalimat bahasa Inggrismu!</p>
+    </div>
+
+    <div class="filter-tabs">
+      ${tabs.map(function(t) {
+        const won = appState.gamesWon.indexOf(t.id) !== -1;
+        return `<button type="button" class="tab-btn ${g === t.id ? `is-active` : ``}" onclick="selectMiniGame('${t.id}')">${won ? `★ ` : ``}${t.label}</button>`;
+      }).join(``)}
+    </div>
+
+    ${board}
+  `;
+}
+
+// ---------------- PAGE 10: STICKERS & CERTIFICATE ----------------
+function renderPage10Awards() {
+  const displayName = appState.learnerName || (appState.companion === `mia` ? `Sahabat Mia` : `Sahabat Oliver`);
+  return `
+    <div>
+      <p class="page-kicker">Halaman 11 • Pencapaian & Koleksi Stiker</p>
+      <h2 class="page-heading">My Sticker Book & Certificate</h2>
+      <p class="page-lead">Kumpulkan semua 8 stiker petualangan dari setiap bab dan cetak sertifikat kelulusan <em>The Little Transportation Adventure</em>!</p>
+    </div>
+
+    <div class="sticker-grid">
+      ${STICKERS.map(function(st) {
+        const unlocked = appState.stickers.indexOf(st.id) !== -1;
+        return `
+          <div class="sticker-badge ${unlocked ? `is-unlocked` : ``}">
+            <div style="width:48px; height:48px; border-radius:9999px; background:${unlocked ? st.color : `var(--surface-container-high)`}; color:var(--on-primary); display:grid; place-items:center;">
+              <i data-lucide="${unlocked ? st.icon : `lock`}" aria-hidden="true"></i>
+            </div>
+            <strong>${st.name}</strong>
+            <span style="font-size:0.8rem; color:var(--on-surface-variant);">${st.desc}</span>
+          </div>
+        `;
+      }).join(``)}
+    </div>
+
+    <div class="certificate-frame">
+      <p class="page-kicker" style="margin:0;">Sertifikat Penghargaan • Certificate of Achievement</p>
+      <h3 style="font-family:var(--font-headline); font-size:1.85rem; margin:0; color:var(--primary);">The Little Transportation Adventure</h3>
+      <p style="margin:0;">Diberikan kepada penjelajah muda hebat:</p>
+      <div style="font-family:var(--font-headline); font-size:1.65rem; font-weight:700; color:var(--story-red); border-bottom:2px solid var(--story-mustard); padding:4px 20px;">
+        ${escapeHtml(displayName)}
+      </div>
+      <p style="margin:0; max-width:56ch;">
+        Telah menjelajahi Little Town bersama <strong>${appState.companion === `mia` ? `Mia` : `Oliver`}</strong>, mengenal <strong>${appState.discoveredVehicles.length}/18</strong> kendaraan, mengumpulkan <strong>${appState.stars} Bintang</strong> dan <strong>${appState.stickers.length}/8 Stiker</strong>!
+      </p>
+      <div class="input-row" style="width:100%; max-width:460px; justify-content:center;">
+        <div class="field-group">
+          <label class="field-label" for="input-learner-name">Nama pada Sertifikat:</label>
+          <input type="text" id="input-learner-name" class="text-input" value="${escapeHtml(appState.learnerName)}" placeholder="Ketik namamu di sini...">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="updateLearnerName()">Simpan Nama</button>
+      </div>
+      <div class="audio-controls-row">
+        <button type="button" class="btn btn-mustard" onclick="downloadCertificatePng()">
+          <i data-lucide="download" aria-hidden="true"></i> Unduh Sertifikat (PNG)
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-reset-progress" onclick="handleResetProgress(this)">
+          Reset Progres
+        </button>
+      </div>
+      <p id="cert-msg" style="margin:0; font-weight:700; font-size:0.88rem;"></p>
+    </div>
+  `;
+}
+
+// ============================================================
+// 6. INTERACTION HANDLERS (All hoisted function declarations)
+// ============================================================
+function escapeHtml(str) {
+  return String(str || ``)
+    .replace(/&/g, `&amp;`)
+    .replace(/</g, `&lt;`)
+    .replace(/>/g, `&gt;`)
+    .replace(/"/g, `&quot;`);
+}
+
+function goToPage(idx) {
+  if (idx < 0 || idx >= PAGES.length) return;
+  appState.currentPage = idx;
+  if (idx > appState.highestPage) appState.highestPage = idx;
+  saveState();
+  renderCurrentPage();
+  window.scrollTo({ top: 0, behavior: `smooth` });
+}
+
+function nextPage() {
+  if (appState.currentPage < PAGES.length - 1) {
+    goToPage(appState.currentPage + 1);
+  }
+}
+
+function prevPage() {
+  if (appState.currentPage > 0) {
+    goToPage(appState.currentPage - 1);
+  }
+}
+
+function selectCompanion(who) {
+  appState.companion = who;
+  playToneCue(who === `mia` ? 587 : 494, 0.14);
+  saveState();
+  renderCurrentPage();
+}
+
+function setVehicleCategory(cat) {
+  appState.vehicleCategory = cat;
+  renderCurrentPage();
+}
+
+function selectGardenVehicle(id) {
+  appState.selectedVehicleId = id;
+  if (appState.discoveredVehicles.indexOf(id) === -1) {
+    appState.discoveredVehicles.push(id);
+    addStars(1);
+    if (appState.discoveredVehicles.length >= 4) {
+      awardSticker(`bus_explorer`, 3);
+    }
+  }
+  saveState();
+  renderCurrentPage();
+  const v = getVehicle(id);
+  speakEnglish(v.en, `garden-audio-msg`);
+}
+
+function triggerVehicleFx(id) {
+  playVehicleSound(id);
+  const el = document.getElementById(`garden-audio-msg`);
+  if (el) el.textContent = `🎵 Memutar efek suara ${getVehicle(id).en}!`;
+}
+
+function chooseChapter2Mode(modeId) {
+  appState.chapter2Mode = modeId;
+  awardSticker(`school_traveler`, 2);
+  saveState();
+  renderCurrentPage();
+  if (modeId !== `walk`) {
+    playVehicleSound(modeId);
+  } else {
+    playToneCue(523, 0.12);
+  }
+}
+
+function tapRoadVehicle(id) {
+  if (id !== `train` && appState.roadFoundIds.indexOf(id) === -1) {
+    appState.roadFoundIds.push(id);
+    addStars(1);
+    if (appState.roadFoundIds.length >= 4) {
+      awardSticker(`road_ranger`, 3);
+    }
+  }
+  if (id === `train`) {
+    awardSticker(`road_ranger`, 2);
+  }
+  saveState();
+  renderCurrentPage();
+  const v = getVehicle(id);
+  playVehicleSound(id);
+  speakEnglish(`${v.en}. ${v.sentence}`, `road-tap-msg`);
+}
+
+function checkRoadQuiz(guess) {
+  const el = document.getElementById(`road-quiz-msg`);
+  if (guess === `bicycle`) {
+    appState.roadQuizSolved = true;
+    playSuccessSound();
+    awardSticker(`road_ranger`, 3);
+    if (el) el.textContent = `✓ Benar! Itu suara bel Bicycle (sepeda)! +3 Bintang`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Coba dengarkan lagi bunyi "kring-kring!" yang nyaring.`;
+  }
+}
+
+function selectHarborBoat(id) {
+  appState.harborBoat = id;
+  appState.harborSailed = false;
+  saveState();
+  renderCurrentPage();
+  playVehicleSound(id);
+  speakEnglish(getVehicle(id).en, `harbor-msg`);
+}
+
+function sailHarborBoat() {
+  appState.harborSailed = true;
+  playVehicleSound(appState.harborBoat);
+  awardSticker(`sky_harbor`, 3);
+  saveState();
+  renderCurrentPage();
+}
+
+function launchAirplane() {
+  appState.airportLaunched = !appState.airportLaunched;
+  playVehicleSound(`airplane`);
+  awardSticker(`sky_harbor`, 3);
+  saveState();
+  renderCurrentPage();
+}
+
+function answerChatQuiz(qIdx, optIdx, isOk) {
+  const el = document.getElementById(`chat-quiz-msg`);
+  if (isOk) {
+    appState.chatQuizSolved[qIdx] = true;
+    playSuccessSound();
+    if (qIdx === 0) {
+      appState.chatQuizIndex = 1;
+    }
+    if (appState.chatQuizSolved[0] && appState.chatQuizSolved[1]) {
+      awardSticker(`chat_buddy`, 3);
+    }
+    saveState();
+    renderCurrentPage();
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Kurang tepat — perhatikan pertanyaan tentang kendaraan yang dipakai!`;
+  }
+}
+
+function updateCustomChat(field, val) {
+  if (field === `place`) appState.customChatPlace = val;
+  if (field === `vehicle`) appState.customChatVehicle = val;
+  saveState();
+  renderCurrentPage();
+}
+
+function solveMission(idx, vehicleId, isOk, msg) {
+  const el = document.getElementById(`mission-msg-${idx}`);
+  if (isOk) {
+    appState.missionsSolved[idx] = true;
+    playVehicleSound(vehicleId);
+    if (appState.missionsSolved.every(Boolean)) {
+      awardSticker(`journey_planner`, 4);
+    }
+    saveState();
+    renderCurrentPage();
+    const afterEl = document.getElementById(`mission-msg-${idx}`);
+    if (afterEl) afterEl.textContent = `✓ ${msg}`;
+    speakEnglish(msg);
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `⚠️ ${msg}`;
+  }
+}
+
+function clickSchoolStudent(id, line, vehicle) {
+  if (appState.schoolClicked.indexOf(id) === -1) {
+    appState.schoolClicked.push(id);
+    addStars(1);
+  }
+  saveState();
+  renderCurrentPage();
+  if (vehicle !== `walk`) playVehicleSound(vehicle);
+  speakEnglish(line, `school-student-msg`);
+}
+
+function pickPersonalSchool(sentence) {
+  appState.personalSchoolMode = sentence;
+  appState.personalSchoolText = sentence;
+  awardSticker(`school_star`, 4);
+  saveState();
+  renderCurrentPage();
+  speakEnglish(sentence, `personal-school-msg`);
+}
+
+function savePersonalSchool() {
+  const inp = document.getElementById(`input-personal-school`);
+  const msg = document.getElementById(`personal-school-msg`);
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (val.length < 4) {
+    if (msg) msg.textContent = `Tulis kalimat singkat dulu, misalnya: "I come by bus."`;
+    playTryAgainSound();
+    return;
+  }
+  appState.personalSchoolText = val;
+  awardSticker(`school_star`, 4);
+  saveState();
+  renderCurrentPage();
+  speakEnglish(val, `personal-school-msg`);
+}
+
+// Mini-Games Handlers
+function selectMiniGame(gid) {
+  appState.activeGame = gid;
+  saveState();
+  renderCurrentPage();
+}
+
+function markGameWon(gid) {
+  if (appState.gamesWon.indexOf(gid) === -1) {
+    appState.gamesWon.push(gid);
+    addStars(3);
+  }
+  if (appState.gamesWon.length >= 2) {
+    awardSticker(`transport_master`, 4);
+  }
+  saveState();
+}
+
+function checkHunter(pick) {
+  const el = document.getElementById(`game-msg`);
+  if (pick === gameHunterTarget) {
+    playSuccessSound();
+    markGameWon(`hunter`);
+    const nextPool = [`car`, `bus`, `bicycle`, `airplane`, `boat`, `train`];
+    gameHunterTarget = nextPool[(nextPool.indexOf(pick) + 1) % nextPool.length];
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `🎉 Tepat! +3 Bintang. Sekarang coba temukan target baru di atas!`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Itu adalah ${getVehicle(pick).en} (${getVehicle(pick).idName}). Coba cari lagi!`;
+  }
+}
+
+function checkSoundGame(pick) {
+  const el = document.getElementById(`game-msg`);
+  if (pick === gameSoundTarget) {
+    playSuccessSound();
+    markGameWon(`sound`);
+    const opts = [`train`, `bicycle`, `submarine`, `helicopter`];
+    gameSoundTarget = opts[(opts.indexOf(pick) + 1) % opts.length];
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `🎉 Hebat! Telingamu tajam! Putar suara baru lagi yuk!`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Bukan ${getVehicle(pick).en}. Dengarkan lagi ya!`;
+  }
+}
+
+function checkClassify(catPick) {
+  const v = getVehicle(gameClassifyQueue[gameClassifyIdx % gameClassifyQueue.length]);
+  const el = document.getElementById(`game-msg`);
+  if (v.cat === catPick) {
+    playSuccessSound();
+    markGameWon(`classify`);
+    gameClassifyIdx++;
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `✓ Benar! ${v.en} memang berada di jalur ${catPick}!`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Belum tepat — pikirkan di mana ${v.en} bergerak!`;
+  }
+}
+
+function pickSentenceWord(idx) {
+  if (gameSentenceBuilt.indexOf(idx) === -1) {
+    gameSentenceBuilt.push(idx);
+    playToneCue(520, 0.08);
+    renderCurrentPage();
+  }
+}
+
+function resetSentenceGame() {
+  gameSentenceBuilt = [];
+  renderCurrentPage();
+}
+
+function checkSentenceGame() {
+  const puzzles = [
+    { target: [`I`, `go`, `to school`, `by`, `bus.`], scrambled: [`by`, `bus.`, `I`, `to school`, `go`] },
+    { target: [`How`, `do`, `you`, `come`, `to school?`], scrambled: [`you`, `come`, `How`, `to school?`, `do`] }
+  ];
+  const puz = puzzles[gameSentenceIdx % puzzles.length];
+  const builtStr = gameSentenceBuilt.map(function(i) { return puz.scrambled[i]; }).join(` `);
+  const targetStr = puz.target.join(` `);
+  const el = document.getElementById(`game-msg`);
+  if (builtStr === targetStr) {
+    playSuccessSound();
+    markGameWon(`sentence`);
+    speakEnglish(targetStr);
+    gameSentenceIdx++;
+    gameSentenceBuilt = [];
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `🎉 Kalimat sempurna: "${targetStr}"`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Susunan masih kurang tepat. Coba klik "Ulangi Susunan" ya!`;
+  }
+}
+
+function checkOddGame(pick) {
+  const sets = [
+    { odd: `submarine`, why: `Submarine bergerak di bawah air, sedangkan Car, Bus, dan Bicycle di darat!` },
+    { odd: `ferry`, why: `Ferry berlayar di atas air, sedangkan tiga lainnya terbang di udara!` }
+  ];
+  const cur = sets[gameOddIdx % sets.length];
+  const el = document.getElementById(`game-msg`);
+  if (pick === cur.odd) {
+    playSuccessSound();
+    markGameWon(`odd`);
+    gameOddIdx++;
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `✓ Betul! ${cur.why}`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Coba perhatikan tempat bergeraknya!`;
+  }
+}
+
+function initMemoryGame() {
+  const base = [`bus`, `train`, `boat`, `airplane`];
+  const deck = base.concat(base);
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = deck[i];
+    deck[i] = deck[j];
+    deck[j] = tmp;
+  }
+  gameMemoryCards = deck;
+  gameMemoryFlipped = [];
+  gameMemoryMatched = [];
+}
+
+function flipMemoryCard(idx) {
+  if (gameMemoryMatched.indexOf(idx) !== -1 || gameMemoryFlipped.indexOf(idx) !== -1) return;
+  if (gameMemoryFlipped.length >= 2) return;
+  gameMemoryFlipped.push(idx);
+  playToneCue(600, 0.08);
+  renderCurrentPage();
+
+  if (gameMemoryFlipped.length === 2) {
+    const a = gameMemoryFlipped[0];
+    const b = gameMemoryFlipped[1];
+    if (gameMemoryCards[a] === gameMemoryCards[b]) {
+      gameMemoryMatched.push(a, b);
+      gameMemoryFlipped = [];
+      playSuccessSound();
+      if (gameMemoryMatched.length === gameMemoryCards.length) {
+        markGameWon(`memory`);
+      }
+      renderCurrentPage();
+    } else {
+      setTimeout(function() {
+        gameMemoryFlipped = [];
+        renderCurrentPage();
+      }, 650);
+    }
+  }
+}
+
+function checkListenGame(pick) {
+  const el = document.getElementById(`game-msg`);
+  if (pick === gameListenTarget) {
+    playSuccessSound();
+    markGameWon(`listen`);
+    const optIds = [`airplane`, `firetruck`, `ferry`, `scooter`];
+    gameListenTarget = optIds[(optIds.indexOf(pick) + 1) % optIds.length];
+    renderCurrentPage();
+    const after = document.getElementById(`game-msg`);
+    if (after) after.textContent = `🎉 Benar! Sekarang dengarkan kata berikutnya!`;
+  } else {
+    playTryAgainSound();
+    if (el) el.textContent = `Itu ${getVehicle(pick).en}. Dengarkan lagi kata Inggrisnya!`;
+  }
+}
+
+function updateLearnerName() {
+  const inp = document.getElementById(`input-learner-name`);
+  if (!inp) return;
+  appState.learnerName = inp.value.trim();
+  saveState();
+  renderCurrentPage();
+  const msg = document.getElementById(`cert-msg`);
+  if (msg) msg.textContent = `✓ Nama pada sertifikat berhasil diperbarui!`;
+}
+
+function downloadCertificatePng() {
+  const canvas = document.createElement(`canvas`);
+  canvas.width = 960;
+  canvas.height = 600;
+  const ctx = canvas.getContext(`2d`);
+  if (!ctx) return;
+
+  // Classic Cream Certificate Canvas
+  ctx.fillStyle = `#faf5ea`;
+  ctx.fillRect(0, 0, 960, 600);
+  ctx.strokeStyle = `#d19422`;
+  ctx.lineWidth = 14;
+  ctx.strokeRect(24, 24, 912, 552);
+  ctx.strokeStyle = `#2f6845`;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(42, 42, 876, 516);
+
+  ctx.fillStyle = `#2f6845`;
+  ctx.font = `bold 24px sans-serif`;
+  ctx.textAlign = `center`;
+  ctx.fillText(`CERTIFICATE OF ACHIEVEMENT`, 480, 115);
+
+  ctx.fillStyle = `#27312a`;
+  ctx.font = `bold 40px serif`;
+  ctx.fillText(`The Little Transportation Adventure`, 480, 175);
+
+  const name = appState.learnerName || (appState.companion === `mia` ? `Sahabat Mia` : `Sahabat Oliver`);
+  ctx.fillStyle = `#b83c2e`;
+  ctx.font = `bold 44px serif`;
+  ctx.fillText(name, 480, 290);
+
+  ctx.fillStyle = `#49544b`;
+  ctx.font = `24px sans-serif`;
+  ctx.fillText(`Kendaraan Ditemukan: ${appState.discoveredVehicles.length}/18   |   Stiker: ${appState.stickers.length}/8   |   Bintang: ${appState.stars}`, 480, 385);
+  ctx.fillText(`Teman Petualangan: ${appState.companion === `mia` ? `Mia` : `Oliver`} (CEFR A1-A2)`, 480, 440);
+
+  const dataUrl = canvas.toDataURL(`image/png`);
+  const base64 = dataUrl.split(`,`)[1];
+
+  if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+    window.notebookAppApi.triggerFileDownload({
+      content: base64,
+      contentType: `image/png`,
+      encoding: `base64`,
+      filename: `Little_Transportation_Certificate.png`
+    });
+    const msg = document.getElementById(`cert-msg`);
+    if (msg) msg.textContent = `✓ Sertifikat PNG sedang diunduh!`;
+  } else {
+    const msg = document.getElementById(`cert-msg`);
+    if (msg) msg.textContent = `Sertifikat siap dicetak!`;
+  }
+}
+
+function handleResetProgress(btn) {
+  if (btn.dataset.armed !== `true`) {
+    btn.dataset.armed = `true`;
+    btn.textContent = `Klik lagi untuk konfirmasi reset`;
+    return;
+  }
+  btn.dataset.armed = `false`;
+  appState = {
+    companion: `mia`,
+    currentPage: 0,
+    highestPage: 0,
+    stars: 0,
+    stickers: [],
+    discoveredVehicles: [`bus`],
+    selectedVehicleId: `bus`,
+    vehicleCategory: `all`,
+    chapter2Mode: `bus`,
+    roadFoundCount: 0,
+    roadFoundIds: [],
+    roadQuizSolved: false,
+    harborBoat: `boat`,
+    harborSailed: false,
+    airportLaunched: false,
+    chatQuizIndex: 0,
+    chatQuizSolved: [false, false],
+    customChatFriend: `Oliver`,
+    customChatPlace: `the beach`,
+    customChatVehicle: `bus`,
+    missionsSolved: [false, false, false],
+    schoolClicked: [],
+    schoolMatchSolved: false,
+    personalSchoolMode: ``,
+    personalSchoolText: ``,
+    activeGame: `hunter`,
+    gamesWon: [],
+    learnerName: ``
+  };
+  saveState();
+  renderCurrentPage();
+}
+
+// ============================================================
+// 7. SHELL CHROME UPDATERS & INITIALIZATION
+// ============================================================
+function updateHeaderStats() {
+  const compEl = document.getElementById(`hdr-companion-name`);
+  const starsEl = document.getElementById(`hdr-stars`);
+  const stickersEl = document.getElementById(`hdr-stickers`);
+  if (compEl) compEl.textContent = appState.companion === `mia` ? `Mia` : `Oliver`;
+  if (starsEl) starsEl.textContent = String(appState.stars);
+  if (stickersEl) stickersEl.textContent = String(appState.stickers.length);
+}
+
+function updateRibbon() {
+  const container = document.getElementById(`chapter-ribbon-steps`);
+  if (!container) return;
+  container.innerHTML = PAGES.map(function(p, idx) {
+    const isCur = idx === appState.currentPage;
+    const isDone = idx < appState.highestPage && !isCur;
+    return `<button type="button" class="ribbon-step-btn ${isCur ? `is-current` : ``} ${isDone ? `is-done` : ``}" onclick="goToPage(${idx})" title="${p.title}">${p.short}</button>`;
+  }).join(``);
+}
+
+function updateFooterNav() {
+  const prevBtn = document.getElementById(`btn-prev-page`);
+  const nextBtn = document.getElementById(`btn-next-page`);
+  const nextLbl = document.getElementById(`btn-next-label`);
+  const indicator = document.getElementById(`footer-page-indicator`);
+  const cur = appState.currentPage;
+  const pageObj = PAGES[cur];
+
+  if (prevBtn) prevBtn.disabled = cur === 0;
+  if (nextBtn) nextBtn.disabled = cur === PAGES.length - 1;
+  if (nextLbl) {
+    nextLbl.textContent = cur < PAGES.length - 1 ? `Berikutnya: ${PAGES[cur + 1].title}` : `Halaman Terakhir`;
+  }
+  if (indicator) {
+    indicator.textContent = `Halaman ${cur + 1} dari ${PAGES.length} — ${pageObj.title}`;
+  }
+}
+
+async function initApp() {
+  if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+    try {
+      const saved = await window.notebookAppApi.getAppState();
+      if (saved && typeof saved === `object`) {
+        appState = Object.assign(appState, saved);
+      }
+    } catch (e) {
+      // Proceed with default initial state
+    }
+  }
+  renderCurrentPage();
+  if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+    window.notebookAppApi.notifyAppReady();
+  }
+}
+
+document.addEventListener(`DOMContentLoaded`, initApp);
+</script>
+</body>
+</html>
+Menampilkan The_Little_Transportation_Adventure (1).html.
